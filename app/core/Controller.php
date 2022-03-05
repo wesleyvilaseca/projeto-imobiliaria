@@ -23,8 +23,6 @@ abstract class Controller
     {
         $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader("app/views/"));
         $twig->addGlobal('URL_BASE', URL_BASE);
-        $twig->addGlobal('URL_BASE_IMAGE', FILEMANAGER['UPLOAD_DIR']);
-        $twig->addGlobal('DIALOG', FILEMANAGER['DIALOG'] . 'field_id=');
         $params['msg'] = getmessage();
         echo $twig->render($viewName . '.twig', $params);
 
@@ -40,8 +38,6 @@ abstract class Controller
         $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader("app/views/"));
         $twig->addGlobal('URL_BASE', URL_BASE);
         $twig->addGlobal('current_menuid', $menuid[0]);
-        $twig->addGlobal('URL_BASE_IMAGE', FILEMANAGER['UPLOAD_DIR']);
-        $twig->addGlobal('DIALOG', FILEMANAGER['DIALOG'] . 'field_id=');
         $params['msg'] = getmessage();
         return $twig->render($viewName . '.twig', $params);
     }

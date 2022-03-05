@@ -6,9 +6,30 @@
 		</h2>
 		<div class="d-flex justify-content-center">
 			<div class="card ps-5 pe-5 pt-5 pb-5" style="width: 600px;">
-				{{form | raw}}
+				<form autocomplete="off" list="autocompleteOff" class="row" method="POST" action="{{ action }}" name="login" id="login" widht="100%">
+					<div class="form-group mb-2 mb-4">
+						<small class="control-label">
+							Email *</small>
+						<div>
+							<input class="form-control" name="email" type="text" style="width:100%">
+						</div>
+					</div>
+					<div class="form-group mb-2 mb-4">
+						<small class="control-label">
+							Senha *</small>
+						<div>
+							<input class="form-control" name="senha" type="password" style="width:100%">
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-xl-6 col-md-12 mt-2">
+							<button type="submit" class="btn btn btn-primary">Logar</button>
+						</div>
+					</div>
+				</form>
+				</div>
 			</div>
 		</div>
-	</div>
-	{{js | raw}}
-{% endblock %}
+		{{js | raw}}
+	{% endblock %}

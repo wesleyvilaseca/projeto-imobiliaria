@@ -72,7 +72,7 @@ class Core
          * 
          * caso não tenha hifen, é vericado, se as string capturada, é algum controller pré definido, se não, segue o fluxo
          */
-        if (strpos($url[0], '-') == true) {
+        if (strpos($url[0], '-') !== true) {
             $route = explode('-', $url[0]);
             for ($i = 0; $i < sizeof($route); $i++) {
                 ($i < (sizeof($route) - 1)) ? $this->route .= $route[$i] . '\\' : $this->controller = $this->route . ucfirst($route[$i]) . "Controller";
@@ -80,13 +80,8 @@ class Core
         } else {
             $controller = ucfirst($url[0]);
             switch ($controller) {
-                case "Page":
+                case "ExempleTag":
                     $controller         = 'institucional\\common\\Page';
-                    $this->controller   = $controller . "Controller";
-                    break;
-
-                case "Blog":
-                    $controller         = 'institucional\\blog\\Blog';
                     $this->controller   = $controller . "Controller";
                     break;
                 default:

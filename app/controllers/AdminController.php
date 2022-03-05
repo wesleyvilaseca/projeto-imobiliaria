@@ -21,7 +21,7 @@ class AdminController extends Controller
     public function index()
     {
         $dados['title']        = 'Login Administração';
-        $dados["form"]         = $this->formlogin();
+        $dados['action']       = URL_BASE . 'admin/logar';
         $dados['js']           = $this->js();
         $view                  = "institucional/pages/login/index";
         $this->renderView($view, $dados);
@@ -57,18 +57,6 @@ class AdminController extends Controller
     public function logout()
     {
         $this->sessionDestroi('admin', URL_BASE . 'admin');
-    }
-
-    private function formlogin()
-    {
-        $form = new FormWrapper(new Form('login'));
-        $email = new Entry('email');
-        $senha = new Password('senha');
-        $form->addField($email, ['label' => 'Email *', 'css' => 'mb-4']);
-        $form->addField($senha, ['label' => 'Senha *', 'css' => 'mb-4']);
-        $form->addAction('Logar', (object)['css' => 'btn btn-primary', 'route' => URL_BASE . 'admin/logar', 'submit' => true]);
-
-        return $form->getForm();
     }
 
     private function js()
