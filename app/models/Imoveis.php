@@ -16,4 +16,8 @@ class Imoveis extends DataLayer
     {
         return $this->find('locador_id =:locador_id and id =:id', "locador_id={$locador_id}&id={$imovel_id}")->fetch();
     }
+
+    public function getImoveis(int $locador_id) {
+        return $this->find('locador_id =:locador_id', "locador_id={$locador_id}")->fetch(true);
+    }
 }

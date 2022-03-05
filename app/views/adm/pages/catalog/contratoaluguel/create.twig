@@ -1,0 +1,99 @@
+{% extends './adm/template.twig' %}
+{% block body %}
+
+	{% for content in html %}
+		{{ content | raw }}
+	{% endfor %}
+
+	<div class="top-title text-end">
+		<a href="{{ route_back }}" class="btn btn-sm btn-dark">
+			<i class="fas fa-angle-left me-1"></i>
+			voltar
+		</a>
+	</div>
+
+	<div>
+		<form method="POST" action="{{ action }}">
+			<div class="form-group mb-2">
+				<small class="control-label">Selecione o Locatario *</small>
+				<select class="form-select" name="locatario_id" onchange="">
+					<option selected disabled>Selecione uma opção</option>
+					{% for locatario in locatarios %}
+						<option value="{{locatario.id}}">{{locatario.nome}}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group mb-2">
+				<small class="control-label">Selecione o Locador *</small>
+				<select class="form-select" id="locador_id" name="locador_id" onchange="selectlocador()">
+					<option selected disabled>Selecione uma opção</option>
+					{% for locador in locadores %}
+						<option value="{{locador.id}}">{{locador.nome}}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group mb-2 selectimovel"></div>
+
+			<div class="row taxas">
+				<div class="form-group mb-2">
+					<small class="control-label">Data de inicio do contrato *</small>
+					<div>
+						<input class="form-control form-control-sm" name="data_inicio" type="date" style="width:100%" value="{{ old ? old.data_inicio : contrato ? contrato.data_inicio : ''}}">
+					</div>
+				</div>
+
+				<div class="form-group mb-2">
+					<small class="control-label">Data de fim do contrato *</small>
+					<div>
+						<input class="form-control form-control-sm" name="data_fim" type="date" style="width:100%" value="{{ old ? old.data_fim : contrato ? contrato.data_fim : ''}}">
+					</div>
+				</div>
+
+				<div class="form-group mb-2">
+					<small class="control-label">Taxa admininstração *</small>
+					<div>
+						<input class="form-control form-control-sm" name="taxa_administracao" type="number" style="width:100%" value="{{ old ? old.taxa_administracao : contrato ? contrato.taxa_administracao : ''}}" min="0" max="100">
+					</div>
+				</div>
+
+				<div class="form-group mb-2">
+					<small class="control-label">Valor do aluguel *</small>
+					<div>
+						<input class="form-control form-control-sm" name="valor_aluguel" type="number" style="width:100%" value="{{ old ? old.valor_aluguel : contrato ? contrato.valor_aluguel : ''}}" min="0">
+					</div>
+				</div>
+
+				<div class="form-group mb-2">
+					<small class="control-label">Valor do condomínio *</small>
+					<div>
+						<input class="form-control form-control-sm" name="valor_condominio" type="number" style="width:100%" value="{{ old ? old.valor_condominio : contrato ? contrato.valor_condominio : ''}}" min="0">
+					</div>
+				</div>
+
+				<div class="form-group mb-2">
+					<small class="control-label">Valor do iptu *</small>
+					<div>
+						<input class="form-control form-control-sm" name="valor_iptu" type="number" style="width:100%" value="{{ old ? old.valor_iptu : contrato ? contrato.valor_iptu : ''}}" min="0">
+					</div>
+				</div>
+			</div>
+
+			<div class="row taxas">
+				<div class="col-xl-6 col-md-12 mt-2">
+					<button type="submit" class="btn btn-sm btn-primary">{{ locador ? 'Editar' : 'Salvar'}}</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	{{js | raw}}
+
+	<style>
+		.taxas {
+			display: none;
+		}
+	</style>
+	<script src="{{ URL_BASE }}app/views/adm/pages/catalog/contratoaluguel/create.js"></script>
+{% endblock %}
