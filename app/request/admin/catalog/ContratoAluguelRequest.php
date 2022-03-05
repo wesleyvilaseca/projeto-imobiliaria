@@ -6,7 +6,7 @@ use app\classes\supports\supports_validation\Validation;
 use app\classes\supports\supports_cripto\Cripto;
 use app\classes\supports\supports_session\DataSession;
 
-class LocadorRequest
+class ContratoAluguelRequest
 {
     use Validation;
     use Cripto;

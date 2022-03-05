@@ -7,7 +7,7 @@ use app\models\ContratoAluguel;
 use app\models\Imoveis;
 use app\models\Locador;
 use app\models\Locatario;
-use app\request\admin\catalog\LocadorRequest;
+use app\request\admin\catalog\ContratoAluguelRequest;
 
 class ContratoaluguelController extends Controller
 {
@@ -25,7 +25,7 @@ class ContratoaluguelController extends Controller
         $this->usuario      = $this->getSession();
         $this->html[]       = $this->load()->controller('admin-common-topbar');
         $this->html[]       = $this->load()->controller('admin-common-sidemenu');
-        $this->request      = new LocadorRequest;
+        $this->request      = new ContratoAluguelRequest;
         $this->repository   = new ContratoAluguel;
         $this->locatario    = new Locatario;
         $this->locador      = new Locador;
@@ -126,17 +126,28 @@ class ContratoaluguelController extends Controller
     public function store()
     {
         $request =  $this->request->save(filterpost($_POST));
-        $client              = $this->repository;
-        $client->nome        = $request['nome'];
-        $client->email       = $request['email'];
-        $client->telefone    = $request['telefone'];
-        $result                 = $client->save();
+        // $client              = $this->repository;
+        // $client->nome        = $request['nome'];
+        // $client->email       = $request['email'];
+        // $client->telefone    = $request['telefone'];
+        // $result              = $client->save();
 
-        if (!$result) {
-            setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);
-            setdataform($request);
-            return redirectBack();
-        }
+        $contrato = $this->load()->controller('admin-documentos-contratoaluguel', [
+            [
+                'locador'       => $this->locador->findById($request['locador_id']),
+                'locatario'     => $this->locatario->findById($request['locatario_id']),
+                'imovel'        => $this->imoveis->findById($request['imovel_id']),
+            ]
+        ]);
+
+        echo $contrato;
+        exit;
+
+        // if (!$result) {
+        //     setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);
+        //     setdataform($request);
+        //     return redirectBack();
+        // }
 
         setmessage(['tipo' => 'success', 'msg' => 'Cliente criado com sucesso']);
         return redirect(self::$route);
