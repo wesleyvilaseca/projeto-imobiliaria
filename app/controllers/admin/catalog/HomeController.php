@@ -22,8 +22,7 @@ class HomeController extends Controller
     public function index()
     {
         $dados['usuario']           = $this->usuario;
-        $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-adm', 'title' => 'Painel de controle'];
-        // $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-adm', 'title' => 'teste 1', 'active' => true];
+        $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-home', 'title' => 'Painel de controle', 'active' => true];
         $dados['title']             = 'Painel de controle ';
         $dados["toptitle"]          = 'Painel de controle';
         $dados['html']              = $this->html;

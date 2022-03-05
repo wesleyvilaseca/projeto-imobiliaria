@@ -1,63 +1,20 @@
+/**
+ * by wesley vila seca sanches
+ * git: github.com/wesleyvilaseca
+ */
 
-$(function () {
-    $(document).ready(function () {
-        //window.history.replaceState(null, null, window.location.pathname);
-        //let concorda = global.getpoliticacookies();
-        //if (concorda) { $('body').append(concorda); }
-        //let idconfig = $('#config').val();
-        //if(!idconfig){
-        //    $('#btnconfig').attr('disabled', true);
-        //}
-    });
-});
-
-$(document).on({
-    ajaxStart: function () {
-        $body.addClass("loading");
+ var helper = {
+    cssLoad: function () {
+        let url = base_url + 'assets/principal-cadastro-login/css/load.css';
+        var link = document.createElement('link');
+        link.setAttribute('type', 'text/css');
+        link.setAttribute('rel', 'stylesheet');
+        link.setAttribute('title', 'cssLoad');
+        link.setAttribute('href', url);
+        document.getElementsByTagName("head").item(0).appendChild(link);
     },
-    ajaxStop: function () {
-        $body.removeClass("loading");
-    }
-});
-
-$body = $("body");
-function cssLoad() {
-    let url = base_url + 'assets/principal-cadastro-login/css/load.css';
-    var link = document.createElement('link');
-    link.setAttribute('type', 'text/css');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('title', 'cssLoad');
-    link.setAttribute('href', url);
-    document.getElementsByTagName("head").item(0).appendChild(link);
-}
-
-function removeCssLoad() {
-    $('link[title="cssLoad"]').remove();
-}
-
-function validaCpfCnpj(val) {
-    var cpf_cnpj = val;
-    var retorno;
-    $.ajax({
-        url: base_url + "principal-cadastroInicial/validaCpfCnpj",
-        type: 'POST',
-        dataType: 'json',
-        async: false,
-        data: {
-            cpf_cnpj: cpf_cnpj,
-        },
-        success: function (data) {
-            (!data.valido) ? retorno = false : retorno = true;
-        }
-    });
-    return retorno;
-}
-
-var global = {
-    btnconfig: function () {
-        let idconfig = $('#config').val();
-        if (idconfig) $('#btnconfig').attr('disabled', false);
-        else $('#btnconfig').attr('disabled', true);
+    removeCssLoad: function () {
+        $('link[title="cssLoad"]').remove();
     },
     select2: function (input) {
         if (Array.isArray(input)) {
@@ -69,7 +26,7 @@ var global = {
                 });
             }
         } else {
-            global.error({
+            helper.error({
                 mensagem: 'Dev! as referências de input do tipo' +
                     'select2, precisa ser em array: ex : [["id-input", "placeholder"],["id-input2, placeholder"]]'
             });
@@ -101,7 +58,7 @@ var global = {
                 $("#" + data.modal).modal('hide');
 
             if (data.table)
-                global.reloadtable(data.table);
+                helper.reloadtable(data.table);
 
             if (data.redirect)
                 window.location.href = data.redirect;
@@ -192,11 +149,11 @@ var global = {
             icon: 'success',
             title: '',
             html: data.mensagem,
-            onAfterClose: () => {
-                global.clearforms(data);
-                if (data.redirect) {
-                    window.location.href = data.redirect;
-                }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (data.reload) return location.reload();
+
+                if (data.redirect) return window.location.href = data.redirect;
             }
         });
     },
@@ -220,19 +177,8 @@ var global = {
         });
         return obj_cadastro;
     },
-    WriteToFile: function (msg) {
-        alert("erro na requisão da api");
-        var form = JSON.stringify(msg);
-        $.ajax({ url: base_url + "tool-pageerror/logerror", type: 'POST', dataType: 'json', data: { formulario: form } });
-    },
-    clearLog: function () {
-        alert("Log apagado com sucesso!");
-        var obj = { route: 'tool-logfile/clear_log' };
-        this.rAjax(obj);
-        //$.ajax({ url: base_url + "tool-logfile/clear_log", type: 'POST', dataType: 'json', data: null });
-    },
     getpoliticacookies: function () {
-        let cookies = global.getLocalStorage('cookies');//localStorage.getItem("cookies");
+        let cookies = helper.getLocalStorage('cookies');//localStorage.getItem("cookies");
         if (cookies != 1 || cookies == null) {
             let html = `<div class="cookies-container">
                     <div class="cookies-content">
@@ -241,7 +187,7 @@ var global = {
                     <p>Utilizamos cookies e tecnologias semelhantes, ao continuar navegando, você concorda com com a nossa <a>Política de Privacidade</a></p>
                     </div>
                     <div class="col-sm-2">
-                    <input type="button" class="btn btn-warning btn-block" value="ok" onclick="global.politicacookies()"> 
+                    <input type="button" class="btn btn-warning btn-block" value="ok" onclick="helper.politicacookies()"> 
                     </div>
                     </div>
                     </div>
@@ -252,13 +198,13 @@ var global = {
         }
     },
     politicacookies: function () {
-        global.setLocalStorage('cookies', 1)
+        helper.setLocalStorage('cookies', 1)
         //localStorage.setItem("cookies", 1);
         return $('.cookies-container').fadeOut();
     },
     rAjax: function (obj, isform = false, retorno = false, encode64 = false, loader = true) {
         if (isform) {
-            var form = (encode64) ? global.b64(JSON.stringify(obj)) : JSON.stringify(obj);
+            var form = (encode64) ? helper.b64(JSON.stringify(obj)) : JSON.stringify(obj);
         }
         if (retorno) {
             if (loader) cssLoad();
@@ -277,7 +223,7 @@ var global = {
         cssLoad();
         if (retorno) {
             return $.ajax({
-                url: `${obj.route}/${(encode64) ? global.b64(JSON.stringify(obj)) : obj}`,
+                url: `${obj.route}/${(encode64) ? helper.b64(JSON.stringify(obj)) : obj}`,
                 type: 'POST',
                 dataType: 'json',
                 data: file,
@@ -339,7 +285,7 @@ var global = {
     }
 }
 
-global.crip = {
+helper.crip = {
     Encripta: function (dados) {
         var mensx = "";
         var l;
@@ -391,3 +337,45 @@ global.crip = {
     }
 }
 
+/**
+ * Obfuscate a plaintext string with a simple rotation algorithm similar to
+ * the rot13 cipher.
+ * @param  {[type]} key rotation index between 0 and n
+ * @param  {Number} n   maximum char that will be affected by the algorithm
+ * @return {[type]}     obfuscated string
+ */
+String.prototype.obfs = function (key, n = 126) {
+    // return String itself if the given parameters are invalid
+    if (!(typeof (key) === 'number' && key % 1 === 0)
+        || !(typeof (key) === 'number' && key % 1 === 0)) {
+        return this.toString();
+    }
+
+    var chars = this.toString().split('');
+
+    for (var i = 0; i < chars.length; i++) {
+        var c = chars[i].charCodeAt(0);
+
+        if (c <= n) {
+            chars[i] = String.fromCharCode((chars[i].charCodeAt(0) + key) % n);
+        }
+    }
+
+    return chars.join('');
+};
+
+/**
+ * De-obfuscate an obfuscated string with the method above.
+ * @param  {[type]} key rotation index between 0 and n
+ * @param  {Number} n   same number that was used for obfuscation
+ * @return {[type]}     plaintext string
+ */
+String.prototype.defs = function (key, n = 126) {
+    // return String itself if the given parameters are invalid
+    if (!(typeof (key) === 'number' && key % 1 === 0)
+        || !(typeof (key) === 'number' && key % 1 === 0)) {
+        return this.toString();
+    }
+
+    return this.toString().obfs(n - key);
+};

@@ -1,0 +1,118 @@
+{% extends './adm/template.twig' %}
+{% block body %}
+
+	{% for content in html %}
+		{{ content | raw }}
+	{% endfor %}
+
+	<div class="top-title text-end">
+		<a href="{{ route_back }}" class="btn btn-sm btn-dark">
+			<i class="fas fa-angle-left me-1"></i>
+			voltar
+		</a>
+	</div>
+
+
+	<form method="POST" action="{{ action }}">
+		<div class="row">
+			<div class="form-group mb-2 col-md-2">
+				<small class="control-label">CEP *</small>
+				<div>
+					<input class="form-control form-control-sm cep" id="cep" name="cep" type="text" style="width:100%" value="{{ old ? old.cep : imovel ? imovel.cep : ''}}" minlength="9" onblur="buscacep(this.value)">
+				</div>
+			</div>
+
+			<div class="form-group mb-2 col-md-2">
+				<small class="control-label">Estado *</small>
+				<div>
+					<input class="form-control form-control-sm" id="uf" name="uf" type="text" style="width:100%" value="{{ old ? old.uf : imovel ? imovel.uf : ''}}" readonly>
+				</div>
+			</div>
+
+			<div class="form-group mb-2 col-md-3">
+				<small class="control-label">Cidade *</small>
+				<div>
+					<input class="form-control form-control-sm" id="cidade" name="cidade" type="text" style="width:100%" value="{{ old ? old.cidade : imovel ? imovel.cidade : ''}}" readonly>
+				</div>
+			</div>
+
+			<div class="form-group mb-2 col-md-3">
+				<small class="control-label">Bairro *</small>
+				<div>
+					<input class="form-control form-control-sm" id="bairro" name="bairro" type="text" style="width:100%" value="{{ old ? old.bairro : imovel ? imovel.bairro : ''}}" readonly>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group mb-2 col-md-6">
+				<small class="control-label">Endereco *</small>
+				<div>
+					<input class="form-control form-control-sm" id="endereco" name="endereco" type="text" style="width:100%" value="{{ old ? old.endereco : imovel ? imovel.endereco : ''}}">
+				</div>
+			</div>
+
+
+			<div class="form-group col-md-2 mb-2">
+				<small class="control-label">Numero</small>
+				<div>
+					<input class="form-control form-control-sm numero" id="numero" name="numero" type="text" style="width:100%" value="{{ old ? old.numero : imovel ? imovel.numero : ''}}">
+				</div>
+			</div>
+
+
+			<div class="form-group mb-2 col-md-6">
+				<small class="control-label">Comlemento *</small>
+				<div>
+					<input class="form-control form-control-sm" name="complemento" type="text" style="width:100%" value="{{ old ? old.complemento : imovel ? imovel.complemento : ''}}">
+				</div>
+			</div>
+
+			<hr>
+			<div class="row">
+				<div class="col-xl-6 col-md-12 mt-2">
+					<button type="submit" class="btn btn-sm btn-primary">{{ imovel ? 'Editar' : 'Salvar'}}</button>
+				</div>
+			</div>
+			<input name="locador_id" type="hidden" style="width:100%" value="{{ locador.id }}">
+			<input name="id" type="hidden" style="width:100%" value="{{ imovel.id }}">
+
+		</div>
+	</form>
+
+
+	{{js | raw}}
+
+
+	<script>
+		$(document).ready(function () {
+$('.cep').mask('00000-000');
+});
+
+function buscacep(cep) {
+$.ajax({
+type: 'GET',
+crossDomain: true,
+dataType: 'jsonp',
+contentType: "application/json",
+url: `https://viacep.com.br/ws/${
+$('#cep').val()
+}/json`,
+beforeSend: function () {
+console.log('procurando...');
+},
+success: function (response) {
+console.log(response);
+$("#uf").val(response.uf);
+$("#cidade").val(response.localidade);
+$("#bairro").val(response.bairro);
+$("#endereco").val(response.logradouro);
+
+},
+error: function () {
+console.log('error!');
+}
+});
+}
+	</script>
+
+{% endblock %}

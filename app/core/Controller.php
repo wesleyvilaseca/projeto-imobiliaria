@@ -24,6 +24,8 @@ abstract class Controller
         $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader("app/views/"));
         $twig->addGlobal('URL_BASE', URL_BASE);
         $params['msg'] = getmessage();
+        $params['old'] = getdataform();
+
         echo $twig->render($viewName . '.twig', $params);
 
         unset($_SESSION['msg']);
@@ -39,6 +41,7 @@ abstract class Controller
         $twig->addGlobal('URL_BASE', URL_BASE);
         $twig->addGlobal('current_menuid', $menuid[0]);
         $params['msg'] = getmessage();
+        $params['old'] = getdataform();
         return $twig->render($viewName . '.twig', $params);
     }
 

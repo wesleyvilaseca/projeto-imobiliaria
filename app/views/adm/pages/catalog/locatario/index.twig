@@ -1,0 +1,90 @@
+{% extends './adm/template.twig' %}
+{% block body %}
+
+	{% for content in html %}
+		{{ content | raw }}
+	{% endfor %}
+
+	<div class="top-title">
+		<a href="{{ route_create }}" class="btn btn-sm btn-primary">
+			Novo Cliente
+		</a>
+		<div>
+
+			<div class="row mt-2">
+				<div class="col-xl-12 col-md-12 col-sm-12">
+					{% if locatarios %}
+						<div class="table-responsive">
+							<table class="table">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">Nome</th>
+										<th scope="col">Email</th>
+										<th scope="col">Telefone</th>
+										<th scope="col">Ação</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									{% for locatario in locatarios %}
+										<tr>
+											<td>{{ locatario.nome }}</td>
+											<td>{{ locatario.email }}</td>
+											<td>{{ locatario.telefone }}</td>
+											<td>
+												<a href="{{ URL_BASE }}admin-catalog-locatario/edit/{{locatario.id}}" class="btn btn-sm btn-warning">
+													Editar
+												</a>
+												<button onclick="delet('{{locatario.id}}', '{{locatario.nome}}')" class="btn btn-sm btn-danger">
+													Remover
+												</button>
+											</td>
+										</tr>
+									{% endfor %}
+
+								</tbody>
+							</table>
+						</div>
+					{% else %}
+						<p class="text-center">
+							Não há locatarios para listar
+						</p>
+					{% endif %}
+				</div>
+			</div>
+
+
+		<script>
+			function delet(id, nome) {
+				if (confirm("Tem certeza que deseja remover o locatario " + nome )) {
+					$.ajax({
+						type: 'POST',
+						data: {
+							'id': id
+						},
+						url: `${base_url}admin-catalog-locatario/remove/${id}`,
+						beforeSend: function() {
+							console.log('removendo...');
+						},
+						success: function(response) {
+							if (!response.success) {
+                        		return helper.error({
+                            		mensagem: response.msg
+                        		});
+                    		}
+
+							return helper.success({
+                        		mensagem: response.msg,
+                        		reload: true
+                    		});
+						},
+						error: function() {
+							console.log('erro ao atualizar!');
+						}
+					});
+				}
+			}
+		</script>
+
+					{{js | raw}}
+{% endblock %}

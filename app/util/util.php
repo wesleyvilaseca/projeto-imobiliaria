@@ -305,3 +305,9 @@ function sessionDestroy($key)
     if (@$_SESSION[$key])
         unset($_SESSION[$key]);
 }
+
+function response_json($data)
+{
+    header('Content-type: application/json');
+    echo json_encode($data);
+}

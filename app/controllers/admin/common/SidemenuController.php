@@ -13,6 +13,8 @@ class SidemenuController extends Controller
     {
         #os menus id é a rota dos controllers dos menus
         $this->menu[] = ['menuid' => 'admin-catalog-home', 'name' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'url' => URL_BASE . 'admin-catalog-home'];
+        $this->menu[] = ['menuid' => 'admin-catalog-locatario', 'name' => 'Locatario', 'icon' => 'fas fa-user-tie', 'url' => URL_BASE . 'admin-catalog-locatario'];
+        $this->menu[] = ['menuid' => 'admin-catalog-locador', 'name'=> 'Locador', 'icon' => 'fas fa-user-tag', 'url' => URL_BASE . 'admin-catalog-locador'];
 
         // $this->menu[] = ['menuid' => 'admin-catalog-departament', 'name' => 'Departamentos', 'icon' => 'fas fa-code-branch', 'url' => URL_BASE . 'admin-catalog-departament'];
 

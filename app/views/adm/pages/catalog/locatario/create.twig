@@ -1,0 +1,54 @@
+{% extends './adm/template.twig' %}
+{% block body %}
+
+	{% for content in html %}
+		{{ content | raw }}
+	{% endfor %}
+
+	<div class="top-title text-end">
+		<a href="{{ route_back }}" class="btn btn-sm btn-dark">
+			<i class="fas fa-angle-left me-1"></i>
+			voltar
+		</a>
+	</div>
+
+	<div>
+		<form method="POST" action="{{ action }}">
+			<div class="form-group mb-2">
+				<small class="control-label">Nome *</small>
+				<div>
+					<input class="form-control form-control-sm" id="nome" name="nome" type="text" style="width:100%" value="{{ old ? old.nome : locatario ? locatario.nome : ''}}"  minlength="5" required>
+				</div>
+			</div>
+
+			<div class="form-group mb-2">
+				<small class="control-label">Email *</small>
+				<div>
+					<input class="form-control form-control-sm" id="email" name="email" type="email" style="width:100%" value="{{ old ? old.email : locatario ? locatario.email : ''}}" required>
+				</div>
+			</div>
+
+			<div class="form-group mb-2">
+				<small class="control-label">Celular *</small>
+				<div>
+					<input class="form-control form-control-sm telefone" id="telefone" name="telefone" type="text" style="width:100%" value="{{ old ? old.telefone : locatario ? locatario.telefone : ''}}" minlength="15" required>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-xl-6 col-md-12 mt-2">
+					<button type="submit" class="btn btn-sm btn-primary">{{ locatario ? 'Editar' : 'Salvar'}}</button>
+				</div>
+			</div>
+			<input name="id" type="hidden" style="width:100%" value="{{ locatario ? locatario.id : ''}}">
+		</form>
+	</div>
+
+	{{js | raw}}
+
+	<script>
+		$(document).ready(function () {
+$('.telefone').mask('(00) 00000-0000');
+});
+	</script>
+{% endblock %}
