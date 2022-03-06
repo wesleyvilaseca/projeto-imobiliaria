@@ -131,8 +131,8 @@ function addDateToken(): string
 
 function dd($val)
 {
-    if(is_array($val)){
-        foreach($val as $v){
+    if (is_array($val)) {
+        foreach ($val as $v) {
             print '<pre>';
             print_r($v);
             print '</pre>';
@@ -320,4 +320,27 @@ function response_json($data)
 {
     header('Content-type: application/json');
     echo json_encode($data);
+}
+
+function getPeriod($date_ini, $data_end)
+{
+    $start = new DateTime($date_ini);
+    $end = new DateTime($data_end);
+
+    $inc = DateInterval::createFromDateString('first day of next month');
+    $end->modify('+1 day');
+
+    $p = new DatePeriod($start, $inc, $end);
+
+    $dates = [];
+    foreach ($p as $d) {
+        $dates[] = $d->format('Y-m-d') . PHP_EOL;
+    }
+
+    $last_date = end($dates);
+    if($last_date < $data_end){
+        $dates[] = $data_end;
+    }
+
+    return $dates;
 }

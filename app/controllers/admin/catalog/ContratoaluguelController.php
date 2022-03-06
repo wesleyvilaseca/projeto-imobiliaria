@@ -8,6 +8,7 @@ use app\models\Imoveis;
 use app\models\Locador;
 use app\models\Locatario;
 use app\request\admin\catalog\ContratoAluguelRequest;
+use app\services\admin\catalog\ContratoAluguelService;
 use DateTime;
 
 class ContratoaluguelController extends Controller
@@ -19,6 +20,7 @@ class ContratoaluguelController extends Controller
     private $locatario;
     private $locador;
     private $imoveis;
+    private $service;
     private static $route = URL_BASE . 'admin-catalog-contratoaluguel';
 
     public function __construct()
@@ -31,6 +33,7 @@ class ContratoaluguelController extends Controller
         $this->locatario    = new Locatario;
         $this->locador      = new Locador;
         $this->imoveis      = new Imoveis;
+        $this->service      = new ContratoAluguelService;
     }
 
     public function index()
@@ -141,6 +144,11 @@ class ContratoaluguelController extends Controller
             setdataform($request);
             return redirectBack();
         }
+
+        $periodo = getPeriod($request['data_inicio'], $request['data_fim']);
+
+        $dados_faturas = $this->service->get_dados($periodo, $request);
+        dd($dados_faturas);
 
         exit;
 
