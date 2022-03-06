@@ -1,9 +1,10 @@
-function selectlocador() {
-    if ($("#locador_id").val()) {
+function selectlocador(locador_id = null) {
+    var locador = $("#locador_id").val() ? $("#locador_id").val() : locador_id ? locador_id : null;
+    if (locador) {
         $.ajax({
             type: 'POST',
             data: {},
-            url: `${base_url}admin-catalog-contratoaluguel/getImoveis/${$("#locador_id").val()}`,
+            url: `${base_url}admin-catalog-contratoaluguel/getImoveis/${locador}`,
             beforeSend: function () {
                 console.log('procurando...');
             },
@@ -14,12 +15,17 @@ function selectlocador() {
                     return helper.error({ mensagem: response.msg });
                 }
                 $(".selectimovel").html(response.data);
+
+                if (imovel_id) {
+                    $("#imovel_id").val(imovel_id);
+                    selectimovel();
+                }
             },
             error: function () {
                 console.log('erro ao atualizar!');
             }
         });
-    }else {
+    } else {
         $(".taxas").css("display", "none");
     }
 }
@@ -27,7 +33,7 @@ function selectlocador() {
 function selectimovel() {
     if ($("#imovel_id").val()) {
         $(".taxas").css("display", "block");
-    }else {
+    } else {
         $(".taxas").css("display", "none");
     }
 }

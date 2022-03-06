@@ -102,11 +102,12 @@ class LocadorController extends Controller
         }
 
 
-        $client              = $this->repository;
-        $client->nome        = $request['nome'];
-        $client->email       = $request['email'];
-        $client->telefone    = $request['telefone'];
-        $result                 = $client->save();
+        $locador                = $this->repository;
+        $locador->nome          = $request['nome'];
+        $locador->email         = $request['email'];
+        $locador->telefone      = $request['telefone'];
+        $locador->data_repasse  = $request['data_repasse'];
+        $result                 = $locador->save();
 
         if (!$result) {
             setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);
@@ -114,7 +115,7 @@ class LocadorController extends Controller
             return redirectBack();
         }
 
-        setmessage(['tipo' => 'success', 'msg' => 'Cliente criado com sucesso']);
+        setmessage(['tipo' => 'success', 'msg' => 'Locador criado com sucesso']);
         return redirect(self::$route);
     }
 
@@ -125,16 +126,15 @@ class LocadorController extends Controller
             setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
         }
 
-        $client = $this->repository->findById($id);
-        if (!$client) {
+        $locador = $this->repository->findById($id);
+        if (!$locador) {
             redirect(self::$route);
             setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
         }
 
-
         $request =  $this->request->save(filterpost($_POST));
 
-        if ($client->email !== $request['email']) {
+        if ($locador->email !== $request['email']) {
             $exist = $this->repository->existEmail($request['email']);
             if ($exist) {
                 setmessage(['tipo' => 'warning', 'msg' => 'Já existe um cadastro de locador com esse email']);
@@ -143,7 +143,7 @@ class LocadorController extends Controller
             }
         }
 
-        if ($client->telefone !== $request['telefone']) {
+        if ($locador->telefone !== $request['telefone']) {
             $exist = $this->repository->existTelefone($request['telefone']);
             if ($exist) {
                 setmessage(['tipo' => 'warning', 'msg' => 'Já existe um cadastro de locador com esse telefone']);
@@ -152,11 +152,12 @@ class LocadorController extends Controller
             }
         }
 
-        $client->nome        = $request['nome'];
-        $client->email       = $request['email'];
-        $client->telefone    = $request['telefone'];
+        $locador->nome          = $request['nome'];
+        $locador->email         = $request['email'];
+        $locador->telefone      = $request['telefone'];
+        $locador->data_repasse  = $request['data_repasse'];
 
-        $result                 = $client->save();
+        $result                 = $locador->save();
 
         if (!$result) {
             setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);

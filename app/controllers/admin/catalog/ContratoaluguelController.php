@@ -8,6 +8,7 @@ use app\models\Imoveis;
 use app\models\Locador;
 use app\models\Locatario;
 use app\request\admin\catalog\ContratoAluguelRequest;
+use DateTime;
 
 class ContratoaluguelController extends Controller
 {
@@ -116,7 +117,7 @@ class ContratoaluguelController extends Controller
         $html .= '<select class="form-select" id="imovel_id" name="imovel_id" onchange="selectimovel()">';
         $html .= '<option selected disabled>Selecione uma opção</option>';
         foreach ($imoveis as $imovel) {
-            $html .= '<option value="' . $imovel->id . '">'. $imovel->endereco . '</option>';
+            $html .= '<option value="' . $imovel->id . '">' . $imovel->endereco . '</option>';
         }
         $html .= '</select>';
 
@@ -126,6 +127,23 @@ class ContratoaluguelController extends Controller
     public function store()
     {
         $request =  $this->request->save(filterpost($_POST));
+
+        if ($request['data_inicio'] > $request['data_fim']) {
+            setmessage(['tipo' => 'warning', 'msg' => 'A data do fim do contrato não pode ser menor que a data inicial']);
+            setdataform($request);
+            return redirectBack();
+        }
+
+        $min_catrato=date('Y-m-d', strtotime('+1 year', strtotime($request['data_inicio'])) );
+
+        if ($request['data_fim'] < $min_catrato) {
+            setmessage(['tipo' => 'warning', 'msg' => 'O periodo mínimo de contrato é de 1 ano']);
+            setdataform($request);
+            return redirectBack();
+        }
+
+        exit;
+
         // $client              = $this->repository;
         // $client->nome        = $request['nome'];
         // $client->email       = $request['email'];

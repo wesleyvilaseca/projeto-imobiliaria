@@ -131,6 +131,16 @@ function addDateToken(): string
 
 function dd($val)
 {
+    if(is_array($val)){
+        foreach($val as $v){
+            print '<pre>';
+            print_r($v);
+            print '</pre>';
+        }
+
+        exit;
+    }
+
     print '<pre>';
     print_r($val);
     print '</pre>';

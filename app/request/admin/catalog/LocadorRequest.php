@@ -12,7 +12,7 @@ class LocadorRequest
     use Cripto;
     use DataSession;
 
-    private $inputs_required = ['nome', 'email'];
+    private $inputs_required = ['nome', 'email', 'data_repasse'];
 
     public function save($request, $id = null)
     {

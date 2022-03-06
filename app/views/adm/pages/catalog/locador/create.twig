@@ -35,6 +35,13 @@
 				</div>
 			</div>
 
+			<div class="form-group mb-2">
+				<small class="control-label">Data repasse * (dia do mês que o repasse precisa acontecer)</small>
+				<div>
+					<input class="form-control form-control-sm data_repasse" id="data_repasse" name="data_repasse" type="number" style="width:100%" value="{{ old ? old.data_repasse : locador ? locador.data_repasse : ''}}" placeholder="05" minlength="0"  maxlength="31" required>
+				</div>
+			</div>
+
 			<hr>
 			<div class="row">
 				<div class="col-xl-6 col-md-12 mt-2">

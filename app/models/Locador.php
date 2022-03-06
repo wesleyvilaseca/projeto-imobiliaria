@@ -8,7 +8,7 @@ class Locador extends DataLayer
 {
     public function __construct()
     {
-        parent::__construct('locador', ['nome', 'email'], 'id', false);
+        parent::__construct('locador', ['nome', 'email', 'data_repasse'], 'id', false);
     }
 
     public function existEmail(string $email)
