@@ -18,15 +18,30 @@ class ContratoAluguelService
         $suport = function ($data, $request, $periodo_faturas, $position) {
             if ($data->format('d') !== "01") {
                 $days = cal_days_in_month(CAL_GREGORIAN, $data->format('n'), $data->format('y'));
-                $diff = $days - $data->format('d');
+                $diff = $days == $data->format('d') ? $days : $days - $data->format('d');
 
                 $condiminio     = tofloat($request['valor_condominio']) / $days;
                 $iptu           = tofloat($request['valor_iptu']) / $days;
                 $valor_aluguel  = tofloat($request['valor_aluguel']) / $days;
-
-                return (object) ['data_vencimento' => $periodo_faturas[$position], 'valor_aluguel' => $valor_aluguel * $diff];
+                return (object) [
+                    'data_vencimento' => $periodo_faturas[$position],
+                    'valor_aluguel' => $aluguel = tofloat($valor_aluguel * $diff),
+                    'valor_iptu'    => $valor_iptu =  tofloat($iptu * $diff),
+                    'condominio'    => $valor_condominio = tofloat($condiminio * $diff),
+                    'valor_fatura'  => $total_fatura = tofloat($aluguel + $valor_iptu + $valor_condominio),
+                    'taxa_adm'      => $taxa_adm = porcentagem($total_fatura, $request['taxa_administracao']),
+                    'valor_repasse' => $total_fatura - $valor_condominio - $taxa_adm
+                ];
             }
-            return (object) ['data_vencimento' => $periodo_faturas[$position], 'valor_aluguel' => floatval($request['valor_aluguel'])];
+            return (object) [
+                'data_vencimento' => $periodo_faturas[$position],
+                'valor_aluguel' => tofloat($request['valor_aluguel']),
+                'valor_iptu'    => tofloat($request['valor_iptu']),
+                'condominio'    => $valor_condominio = tofloat($request['valor_condominio']),
+                'valor_fatura'  => $total_fatura = tofloat($request['valor_aluguel'] + $request['valor_iptu'] + $request['valor_condominio']),
+                'taxa_adm'      => $taxa_adm = porcentagem($total_fatura, $request['taxa_administracao']),
+                'valor_repasse' => $total_fatura - $valor_condominio - $taxa_adm 
+            ];
         };
 
         $array = [];
@@ -43,7 +58,6 @@ class ContratoAluguelService
         }
 
         //acho que é isso
-        // dd($array);
         return $array;
     }
 }

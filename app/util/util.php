@@ -338,9 +338,14 @@ function getPeriod($date_ini, $data_end)
     }
 
     $last_date = end($dates);
-    if($last_date < $data_end){
+    if ($last_date < $data_end) {
         $dates[] = $data_end;
     }
 
     return $dates;
+}
+
+function porcentagem($total, $pctm)
+{
+    return $total - ($total - ($total / 100 * $pctm));
 }

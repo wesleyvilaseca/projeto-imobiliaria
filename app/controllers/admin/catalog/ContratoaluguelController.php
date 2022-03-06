@@ -134,7 +134,7 @@ class ContratoaluguelController extends Controller
         if ($request['data_inicio'] > $request['data_fim']) {
             setmessage(['tipo' => 'warning', 'msg' => 'A data do fim do contrato não pode ser menor que a data inicial']);
             setdataform($request);
-            return redirectBack();
+            return redirect(self::$route . '/create');
         }
 
         $min_catrato=date('Y-m-d', strtotime('+1 year', strtotime($request['data_inicio'])) );
@@ -142,7 +142,7 @@ class ContratoaluguelController extends Controller
         if ($request['data_fim'] < $min_catrato) {
             setmessage(['tipo' => 'warning', 'msg' => 'O periodo mínimo de contrato é de 1 ano']);
             setdataform($request);
-            return redirectBack();
+            return redirect(self::$route . '/create');
         }
 
         $periodo = getPeriod($request['data_inicio'], $request['data_fim']);
