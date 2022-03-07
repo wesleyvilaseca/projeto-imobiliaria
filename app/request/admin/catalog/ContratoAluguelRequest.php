@@ -12,16 +12,26 @@ class ContratoAluguelRequest
     use Cripto;
     use DataSession;
 
+    public $request_get;
+    public $request_post;
+
     private $inputs_required = ['locador_id', 'locatario_id', 'imovel_id', 'contrato', 'data_inicio', 'data_fim', 'taxa_administracao', 'valor_aluguel', 'valor_condominio', 'valor_iptu'];
 
-    public function save($request, $id = null)
+    public function __construct()
     {
+        $this->request_post = $_POST;
+        $this->request_get  = $_GET; 
+    }
+
+    public function post($id = null)
+    {
+        $this->request_post =  filterpost($this->request_post);
         $request['id'] = $id;
-        foreach ($request as $requestkey => $requestitem) {
+        foreach ($this->request_post as $requestkey => $requestitem) {
             foreach ($this->inputs_required as $item) {
                 if ($requestkey == $item and !$requestitem) {
                     setmessage(['tipo' => 'warning', 'msg' => 'Os campos com asterisco (*) são de preenchimento obrigatório']);
-                    setdataform($request);
+                    setdataform($this->request_post);
                     if (!$id) {
                         return redirect(URL_BASE . 'admin-catalog-locador/create');
                     }
@@ -29,6 +39,10 @@ class ContratoAluguelRequest
                 }
             }
         }
-        return $request;
+        return $this->request_post;
+    }
+
+    public function get() {
+        return $this->request_get;
     }
 }

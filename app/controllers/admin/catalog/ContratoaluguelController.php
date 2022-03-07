@@ -129,7 +129,7 @@ class ContratoaluguelController extends Controller
 
     public function store()
     {
-        $request =  $this->request->save(filterpost($_POST));
+        $request =  $this->request->post();
 
         if ($request['data_inicio'] > $request['data_fim']) {
             setmessage(['tipo' => 'warning', 'msg' => 'A data do fim do contrato não pode ser menor que a data inicial']);
@@ -145,19 +145,6 @@ class ContratoaluguelController extends Controller
             return redirect(self::$route . '/create');
         }
 
-        $periodo = getPeriod($request['data_inicio'], $request['data_fim']);
-
-        $dados_faturas = $this->service->get_dados($periodo, $request);
-        dd($dados_faturas);
-
-        exit;
-
-        // $client              = $this->repository;
-        // $client->nome        = $request['nome'];
-        // $client->email       = $request['email'];
-        // $client->telefone    = $request['telefone'];
-        // $result              = $client->save();
-
         $contrato = $this->load()->controller('admin-documentos-contratoaluguel', [
             [
                 'locador'       => $this->locador->findById($request['locador_id']),
@@ -166,16 +153,16 @@ class ContratoaluguelController extends Controller
             ]
         ]);
 
-        echo $contrato;
-        exit;
+        $periodo = getPeriod($request['data_inicio'], $request['data_fim']);
 
-        // if (!$result) {
-        //     setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);
-        //     setdataform($request);
-        //     return redirectBack();
-        // }
+        $contrato = $this->service->gerar_contrato($periodo, $request, $contrato);
 
-        setmessage(['tipo' => 'success', 'msg' => 'Cliente criado com sucesso']);
+        if(!$contrato) {
+            setmessage(['tipo' => 'warning', 'msg' => 'Erro na operação']);
+            redirect(self::$route);
+        }
+
+        setmessage(['tipo' => 'success', 'msg' => 'Contrato criado com sucesso']);
         return redirect(self::$route);
     }
 
