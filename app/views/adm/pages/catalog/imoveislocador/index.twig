@@ -43,15 +43,17 @@
 									<td>{{ imovel.bairro }}</td>
 									<td>{{ imovel.endereco }}</td>
 									<td class="fw-bold">{{ imovel.status_imovel == 1 ? 'Ativo' : '<spam class="text-danger">Inativo</spam>' }}</td>
-									<td class="fw-bold">{{ imovel.imovelEmcontratoAtivo ? '<spam class="text-info">Sim</spam>' : '<spam class="text-success">Não</spam>' }}</td>
+									<td class="fw-bold">{{ imovel.imovelEmcontratoAtivo ? '<spam class="text-info">Não</spam>' : '<spam class="text-success">Sim</spam>' }}</td>
 
 									<td>
 										<a href="{{ URL_BASE }}admin-catalog-imoveislocador/edit/{{locador.id}}/{{imovel.id}}" class="btn btn-sm btn-warning" title="editar">
 											<i class="fas fa-edit"></i>
 										</a>
-										<button onclick="delet('{{locador.id}}', '{{imovel.id}}', '{{imovel.endereco}}')" class="btn btn-sm btn-danger" title="remover">
-											<i class="fas fa-trash-alt"></i>
-										</button>
+										{% if imovel.imovelEmcontratoAtivo == false %}
+											<button onclick="delet('{{locador.id}}', '{{imovel.id}}', '{{imovel.endereco}}')" class="btn btn-sm btn-danger" title="remover">
+												<i class="fas fa-trash-alt"></i>
+											</button>
+										{% endif %}
 									</td>
 								</tr>
 							{% endfor %}

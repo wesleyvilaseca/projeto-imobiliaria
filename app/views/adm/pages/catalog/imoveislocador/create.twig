@@ -12,34 +12,40 @@
 		</a>
 	</div>
 
+	{% if imovel.imovelEmcontratoAtivo == true %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			Este imovel está em contrato ativo e não pode ser editado
+		</div>
+	{% endif %}
+
 
 	<form method="POST" action="{{ action }}">
 		<div class="row">
 			<div class="form-group mb-2 col-md-2">
 				<small class="control-label">CEP *</small>
 				<div>
-					<input class="form-control form-control-sm cep" id="cep" name="cep" type="text" style="width:100%" value="{{ old ? old.cep : imovel ? imovel.cep : ''}}" minlength="9" onblur="buscacep(this.value)">
+					<input class="form-control form-control-sm cep" id="cep" name="cep" type="text" style="width:100%" value="{{ old ? old.cep : imovel ? imovel.cep : ''}}" minlength="9" onblur="buscacep(this.value)" {{imovel.imovelEmcontratoAtivo ? 'disabled' : ''}}>
 				</div>
 			</div>
 
 			<div class="form-group mb-2 col-md-2">
 				<small class="control-label">Estado *</small>
 				<div>
-					<input class="form-control form-control-sm" id="uf" name="uf" type="text" style="width:100%" value="{{ old ? old.uf : imovel ? imovel.uf : ''}}" readonly>
+					<input class="form-control form-control-sm" id="uf" name="uf" type="text" style="width:100%" value="{{ old ? old.uf : imovel ? imovel.uf : ''}}" {{imovel.imovelEmcontratoAtivo ? 'disabled' : 'readonly'}}>
 				</div>
 			</div>
 
 			<div class="form-group mb-2 col-md-3">
 				<small class="control-label">Cidade *</small>
 				<div>
-					<input class="form-control form-control-sm" id="cidade" name="cidade" type="text" style="width:100%" value="{{ old ? old.cidade : imovel ? imovel.cidade : ''}}" readonly>
+					<input class="form-control form-control-sm" id="cidade" name="cidade" type="text" style="width:100%" value="{{ old ? old.cidade : imovel ? imovel.cidade : ''}}" {{imovel.imovelEmcontratoAtivo ? 'disabled' : 'readonly'}}>
 				</div>
 			</div>
 
 			<div class="form-group mb-2 col-md-3">
 				<small class="control-label">Bairro *</small>
 				<div>
-					<input class="form-control form-control-sm" id="bairro" name="bairro" type="text" style="width:100%" value="{{ old ? old.bairro : imovel ? imovel.bairro : ''}}" readonly>
+					<input class="form-control form-control-sm" id="bairro" name="bairro" type="text" style="width:100%" value="{{ old ? old.bairro : imovel ? imovel.bairro : ''}}" {{imovel.imovelEmcontratoAtivo ? 'disabled' : 'readonly'}}>
 				</div>
 			</div>
 		</div>
@@ -47,7 +53,7 @@
 			<div class="form-group mb-2 col-md-6">
 				<small class="control-label">Endereco *</small>
 				<div>
-					<input class="form-control form-control-sm" id="endereco" name="endereco" type="text" style="width:100%" value="{{ old ? old.endereco : imovel ? imovel.endereco : ''}}">
+					<input class="form-control form-control-sm" id="endereco" name="endereco" type="text" style="width:100%" value="{{ old ? old.endereco : imovel ? imovel.endereco : ''}}" {{imovel.imovelEmcontratoAtivo ? 'disabled' : ''}}>
 				</div>
 			</div>
 
@@ -55,7 +61,7 @@
 			<div class="form-group col-md-2 mb-2">
 				<small class="control-label">Numero</small>
 				<div>
-					<input class="form-control form-control-sm numero" id="numero" name="numero" type="text" style="width:100%" value="{{ old ? old.numero : imovel ? imovel.numero : ''}}">
+					<input class="form-control form-control-sm numero" id="numero" name="numero" type="text" style="width:100%" value="{{ old ? old.numero : imovel ? imovel.numero : ''}}" {{imovel.imovelEmcontratoAtivo ? 'disabled' : ''}}>
 				</div>
 			</div>
 
@@ -63,7 +69,7 @@
 			<div class="form-group mb-2 col-md-6">
 				<small class="control-label">Comlemento *</small>
 				<div>
-					<input class="form-control form-control-sm" name="complemento" type="text" style="width:100%" value="{{ old ? old.complemento : imovel ? imovel.complemento : ''}}">
+					<input class="form-control form-control-sm" name="complemento" type="text" style="width:100%" value="{{ old ? old.complemento : imovel ? imovel.complemento : ''}}" {{imovel.imovelEmcontratoAtivo ? 'disabled' : ''}}>
 				</div>
 			</div>
 
@@ -72,7 +78,7 @@
 		<div class="row">
 			<div class="form-group mb-2 col-md-6">
 				<small class="control-label">Status *</small>
-				<select class="form-select form-select-sm" id="status_imovel" name="status_imovel">
+				<select class="form-select form-select-sm" id="status_imovel" name="status_imovel" {{imovel.imovelEmcontratoAtivo ? 'disabled' : ''}}>
 					<option value="1" {{old.status_imovel == 1 ? 'selected' : 1 == imovel.status_imovel ? 'selected' : ''}}>Ativo</option>
 					<option value="2" {{old.status_imovel == 2 ? 'selected' : 2 == imovel.status_imovel ? 'selected' : ''}}>Inativo</option>
 				</select>
@@ -80,13 +86,15 @@
 		</div>
 
 		<hr>
-		<div class="row">
-			<div class="col-xl-6 col-md-12 mt-2">
-				<button type="submit" class="btn btn-sm btn-primary">{{ imovel ? 'Editar' : 'Salvar'}}</button>
+		{% if imovel.imovelEmcontratoAtivo == false %}
+			<div class="row">
+				<div class="col-xl-6 col-md-12 mt-2">
+					<button type="submit" class="btn btn-sm btn-primary">{{ imovel ? 'Editar' : 'Salvar'}}</button>
+				</div>
 			</div>
-		</div>
-		<input name="locador_id" type="hidden" style="width:100%" value="{{ locador.id }}">
-		<input name="id" type="hidden" style="width:100%" value="{{ imovel.id }}">
+			<input name="locador_id" type="hidden" style="width:100%" value="{{ locador.id }}">
+			<input name="id" type="hidden" style="width:100%" value="{{ imovel.id }}">
+		{% endif %}
 	</form>
 
 
