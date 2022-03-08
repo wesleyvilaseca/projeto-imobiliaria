@@ -1,0 +1,16 @@
+{% extends './adm/template.twig' %}
+{% block body %}
+
+	{% for content in html %}
+		{{ content | raw }}
+	{% endfor %}
+
+	<div class="top-title" align="right">
+		<a href="{{ route_back }}" class="btn btn-sm btn-dark">
+		<i class="fas fa-angle-left me-1"></i>
+			Voltar 
+		</a>
+	<div>
+
+	{{js | raw}}
+{% endblock %}

@@ -86,14 +86,8 @@ class ContratoAluguelService
 
     public function gerar_contrato(array $periodo_faturas, $request, $contrato)
     {
-        $imovel = $this->imovel->find("id =: id and status_imovel=:status_imovel", "id={$request['imovel_id']}&status_imovel=1")->fetch();
+        $imovel = $this->imovel->find("id =:id and status_imovel=:status_imovel", "id={$request['imovel_id']}&status_imovel=1")->fetch();
         if (!$imovel) {
-            return false;
-        }
-        
-        $imovel->status_imovel  = 3;
-        $imovelId               = $imovel->save();
-        if (!$imovelId) {
             return false;
         }
 

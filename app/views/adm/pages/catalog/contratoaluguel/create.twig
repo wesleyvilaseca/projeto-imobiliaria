@@ -18,6 +18,12 @@
 		</a>
 	</div>
 
+	{% if exist_imovel == false %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			Atenção, não existe imovel disponível para locação
+		</div>
+	{% endif %}
+
 	<div>
 		<form method="POST" action="{{ action }}">
 			<div class="form-group mb-2">
@@ -30,17 +36,19 @@
 				</select>
 			</div>
 
-			<div class="form-group mb-2">
-				<small class="control-label">Selecione o Locador *</small>
-				<select class="form-select" id="locador_id" name="locador_id" onchange="selectlocador()">
-					<option selected disabled>Selecione uma opção</option>
-					{% for locador in locadores %}
-						{% if locador.imovelDisponivel %}
-							<option value="{{locador.id}}" {{old.locador_id == locador.id ? 'selected' : contrato.locador_id == locador.id ? 'selected' : ''}}>{{locador.nome}}</option>
-						{% endif %}
-					{% endfor %}
-				</select>
-			</div>
+			{% if exist_imovel %}
+				<div class="form-group mb-2">
+					<small class="control-label">Selecione o Locador *</small>
+					<select class="form-select" id="locador_id" name="locador_id" onchange="selectlocador()">
+						<option selected disabled>Selecione uma opção</option>
+						{% for locador in locadores %}
+							{% if locador.imovelDisponivel %}
+								<option value="{{locador.id}}" {{old.locador_id == locador.id ? 'selected' : contrato.locador_id == locador.id ? 'selected' : ''}}>{{locador.nome}}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+			{% endif %}
 
 			<div class="form-group mb-2 selectimovel"></div>
 

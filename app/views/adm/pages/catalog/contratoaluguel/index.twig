@@ -18,9 +18,10 @@
 							<table class="table" id="contrato_table">
 								<thead class="thead-dark">
 									<tr>
-										<th scope="col">Codigo Contrato</th>
 										<th scope="col">Locador</th>
 										<th scope="col">Locatario</th>
+										<th scope="col">Endereço residência</th>
+										<th scope="col">Situação do contrato</th>
 										<th scope="col">Ação</th>
 									</tr>
 								</thead>
@@ -28,20 +29,17 @@
 
 									{% for contrato in contratos %}
 										<tr>
-											<td>{{ contrato.nome }}</td>
-											<td>{{ contrato.email }}</td>
-											<td>{{ contrato.telefone }}</td>
+											<td>{{ contrato.imovel.locador.nome }}</td>
+											<td>{{ contrato.locatario.nome }}</td>
+											<td>{{ contrato.imovel.endereco }}</td>
+											<td class="fw-bold">{{ contrato.status_contrato == 1 ? '<spam class="badge bg-info"> Ativo </spam>' : '<spam class="badge bg-primary"> Inativo </spam>' }}</td>
 											<td>
-												<a href="{{ URL_BASE }}admin-catalog-contratoaluguel/edit/{{contrato.id}}" class="btn btn-sm btn-warning" title="editar">
-													<i class="fas fa-edit"></i>
+												<a href="{{ URL_BASE }}admin-catalog-contratoalugueldetalhes/index/{{contrato.id}}" class="btn btn-sm btn-dark" title="visualisar">
+													<i class="fas fa-eye"></i>
 												</a>
-												<button onclick="delet('{{contrato.id}}', '{{contrato.codigo}}')" class="btn btn-sm btn-danger" title="remover">
-													<i class="fas fa-trash-alt"></i>
-												</button>
 											</td>
 										</tr>
 									{% endfor %}
-
 								</tbody>
 							</table>
 						</div>
@@ -54,37 +52,32 @@
 			</div>
 
 
-		<script>
-			function delet(id, codigo) {
-				if (confirm("Tem certeza que deseja remover o contrato " + codigo )) {
-					$.ajax({
-						type: 'POST',
-						data: {
-							'id': id
-						},
-						url: `${base_url}admin-catalog-locador/remove/${id}`,
-						beforeSend: function() {
-							console.log('removendo...');
-						},
-						success: function(response) {
-							if (!response.success) {
-                        		return helper.error({
-                            		mensagem: response.msg
-                        		});
-                    		}
+			<script>
+				function delet(id, codigo) {
+if (confirm("Tem certeza que deseja remover o contrato " + codigo)) {
+$.ajax({
+type: 'POST',
+data: {
+'id': id
+},
+url: `${base_url}admin-catalog-locador/remove/${id}`,
+beforeSend: function () {
+console.log('removendo...');
+},
+success: function (response) {
+if (! response.success) {
+return helper.error({mensagem: response.msg});
+}
 
-							return helper.success({
-                        		mensagem: response.msg,
-                        		reload: true
-                    		});
-						},
-						error: function() {
-							console.log('erro ao atualizar!');
-						}
-					});
-				}
-			}
-		</script>
+return helper.success({mensagem: response.msg, reload: true});
+},
+error: function () {
+console.log('erro ao atualizar!');
+}
+});
+}
+}
+			</script>
 
-					{{js | raw}}
-{% endblock %}
+			{{js | raw}}
+		{% endblock %}

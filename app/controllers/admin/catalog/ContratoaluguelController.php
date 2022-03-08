@@ -42,7 +42,7 @@ class ContratoaluguelController extends Controller
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-home', 'title' => 'Painel de controle'];
         $dados['breadcrumb'][]      = ['route' => '#', 'title' => 'Contratos', 'active' => true];
         $dados['route_create']      = URL_BASE . 'admin-catalog-contratoaluguel/create';
-        $dados['contratos']           = $this->repository->find()->fetch(true);
+        $dados['contratos']         = $this->repository->find()->fetch(true);
         $dados['title']             = 'Contratos';
         $dados["toptitle"]          = 'Contratos';
         $dados['html']              = $this->html;
@@ -54,18 +54,17 @@ class ContratoaluguelController extends Controller
 
     public function create()
     {
-        // $locador = $this->locador->find("status_locador =:status_locador", "status_locador=1")->fetch(true);
+        $locador = $this->locador->find("status_locador =:status_locador", "status_locador=1")->fetch(true);
 
-        // foreach($locador as $l) {
-        //     // dd($l->imovelDisponivel);
-        //     if(!$l->imovelDisponivel){
-        //         dd($l);
-        //     }
-        // }
+        $exist_imovel = false;
+        foreach ($locador as $l) {
+            if ($l->imovelDisponivel) {
+                $exist_imovel = true;
+                break;
+            }
+        }
 
-        // dd('aqui');
-
-
+        $dados['exist_imovel']         = $exist_imovel;
         $dados['usuario']           = $this->usuario;
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-home', 'title' => 'Painel de controle'];
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-contratoaluguel', 'title' => 'Contratos'];
@@ -80,34 +79,6 @@ class ContratoaluguelController extends Controller
         $dados['js']                = $this->js();
 
         $this->renderView('adm/pages/catalog/contratoaluguel/create', $dados);
-    }
-
-    public function edit($id = null)
-    {
-        if (!$id) {
-            redirect(self::$route);
-            setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
-        }
-
-        $locador = $this->repository->findById($id);
-        if (!$locador) {
-            redirect(self::$route);
-            setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
-        }
-
-        $dados['usuario']           = $this->usuario;
-        $dados['locador']            = $locador;
-        $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-home', 'title' => 'Painel de controle'];
-        $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-locador', 'title' => 'Locadores'];
-        $dados['breadcrumb'][]      = ['route' => URL_BASE . '#', 'title' => 'Editar Locador ' . $locador->nome, 'active' => true];
-        $dados['action']            = URL_BASE . 'admin-catalog-locador/update/' . $locador->id;
-        $dados['route_back']        = URL_BASE . 'admin-catalog-locador';
-        $dados['title']             = 'Editar locador ' . $locador->nome;
-        $dados["toptitle"]          = 'Editar locador ' . $locador->nome;
-        $dados['html']              = $this->html;
-        $dados['js']                = $this->js();
-
-        $this->renderView('adm/pages/catalog/locador/create', $dados);
     }
 
     public function getImoveis(int $locador_id = null)
@@ -132,7 +103,8 @@ class ContratoaluguelController extends Controller
         $html .= '<select class="form-select" id="imovel_id" name="imovel_id" onchange="selectimovel()">';
         $html .= '<option selected disabled>Selecione uma opção</option>';
         foreach ($imoveis as $imovel) {
-            $html .= '<option value="' . $imovel->id . '">' . $imovel->endereco . '</option>';
+            if (!$imovel->imovelEmcontratoAtivo)
+                $html .= '<option value="' . $imovel->id . '">' . $imovel->endereco . '</option>';
         }
         $html .= '</select>';
 
@@ -149,7 +121,7 @@ class ContratoaluguelController extends Controller
             return redirect(self::$route . '/create');
         }
 
-        $min_catrato=date('Y-m-d', strtotime('+1 year', strtotime($request['data_inicio'])) );
+        $min_catrato = date('Y-m-d', strtotime('+1 year', strtotime($request['data_inicio'])));
 
         if ($request['data_fim'] < $min_catrato) {
             setmessage(['tipo' => 'warning', 'msg' => 'O periodo mínimo de contrato é de 1 ano']);
@@ -169,87 +141,13 @@ class ContratoaluguelController extends Controller
 
         $contrato = $this->service->gerar_contrato($periodo, $request, $contrato);
 
-        if(!$contrato) {
+        if (!$contrato) {
             setmessage(['tipo' => 'warning', 'msg' => 'Erro na operação']);
             redirect(self::$route);
         }
 
         setmessage(['tipo' => 'success', 'msg' => 'Contrato criado com sucesso']);
         return redirect(self::$route);
-    }
-
-    public function update($id = null)
-    {
-        if (!$id) {
-            redirect(self::$route);
-            setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
-        }
-
-        $client = $this->repository->findById($id);
-        if (!$client) {
-            redirect(self::$route);
-            setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
-        }
-
-
-        $request =  $this->request->save(filterpost($_POST));
-
-        if ($client->email !== $request['email']) {
-            $exist = $this->repository->existEmail($request['email']);
-            if ($exist) {
-                setmessage(['tipo' => 'warning', 'msg' => 'Já existe um cadastro de locador com esse email']);
-                setdataform($request);
-                return redirectBack();
-            }
-        }
-
-        if ($client->telefone !== $request['telefone']) {
-            $exist = $this->repository->existTelefone($request['telefone']);
-            if ($exist) {
-                setmessage(['tipo' => 'warning', 'msg' => 'Já existe um cadastro de locador com esse telefone']);
-                setdataform($request);
-                return redirectBack();
-            }
-        }
-
-        $client->nome        = $request['nome'];
-        $client->email       = $request['email'];
-        $client->telefone    = $request['telefone'];
-
-        $result                 = $client->save();
-
-        if (!$result) {
-            setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);
-            setdataform($request);
-            return redirectBack();
-        }
-
-        setmessage(['tipo' => 'success', 'msg' => 'Locador editado com sucesso']);
-        return redirect(self::$route);
-    }
-
-    public function remove($id = null)
-    {
-        if (!self::isAjax()) {
-            setmessage(['tipo' => 'success', 'msg' => 'Operação não']);
-            return redirectBack();
-        }
-
-        if (!$id) {
-            return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
-        }
-
-        $client = $this->repository->findById($id);
-        if (!$client) {
-            return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
-        }
-
-        $result = $client->destroy();
-        if (!$result) {
-            return response_json(['msg' => 'Erro na operação', 'success' => false]);
-        }
-
-        return response_json(['msg' => 'Locador removido com sucesso', 'success' => true]);
     }
 
     private function js()

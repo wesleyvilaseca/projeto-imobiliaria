@@ -15,4 +15,14 @@ class ContratoAluguel extends DataLayer
     {
         return $this->find('locatario_id =:locatario_id AND imovel_id =:imovel_id', "locatario_id={$locatario_id}&imovel_id={$imovel_id}")->fetch();
     }
+
+    public function imovel() 
+    {
+        return (new Imoveis)->find("id=:id", "id={$this->imovel_id}")->fetch();
+    }
+
+    public function locatario()
+    {
+        return (new Locatario)->find("id =:id", "id={$this->locatario_id}")->fetch();
+    }
 }

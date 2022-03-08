@@ -1,6 +1,6 @@
 {
-    "name": "wesley.vilaseca/projetocmsphp",
-    "description": "sistema php padrão institucional e blog com criação de páginas dinâmica",
+    "name": "wesley.vilaseca/projeto-imobiliaria",
+    "description": "sistema imobiliaria em php",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [
