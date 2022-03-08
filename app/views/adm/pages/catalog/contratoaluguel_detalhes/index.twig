@@ -7,10 +7,193 @@
 
 	<div class="top-title" align="right">
 		<a href="{{ route_back }}" class="btn btn-sm btn-dark">
-		<i class="fas fa-angle-left me-1"></i>
-			Voltar 
+			<i class="fas fa-angle-left me-1"></i>
+			Voltar
 		</a>
-	<div>
+	</div>
+
+	<div class="mb-3">
+		<a href="#" class="btn btn-sm btn-primary">Visualisar contrato</a>
+	</div>
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item" role="presentation">
+			<button class="nav-link active" id="faturas-tab" data-bs-toggle="tab" data-bs-target="#faturas" type="button" role="tab" aria-controls="faturas" aria-selected="true">Faturas</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="detalhes-tab" data-bs-toggle="tab" data-bs-target="#detalhes" type="button" role="tab" aria-controls="detalhes" aria-selected="false">Detalhes do contrato</button>
+		</li>
+	</ul>
+
+	<div class="tab-content" id="myTabContent">
+		<div class="tab-pane fade show active" id="faturas" role="tabpanel" aria-labelledby="faturas-tab">
+
+			<div class="table-responsive">
+				<table class="table" id="locador_table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">Valor fatura</th>
+							<th scope="col">Data vencimento</th>
+							<th scope="col">Valor Repasse</th>
+							<th scope="col">Valor taxa administrativa</th>
+							<th scope="col">Status fatura</th>
+							<th scope="col">Status repasse</th>
+
+						</tr>
+					</thead>
+					<tbody>
+
+						{% for fatura in faturas %}
+							<tr>
+								<td>R$
+									{{ fatura.valor_fatura |number_format(2, '.', ',') }}</td>
+								<td>{{ fatura.data_vencimento |date('m/d/Y') }}</td>
+								<td>R$
+									{{ fatura.valor_repasse |number_format(2, '.', ',') }}</td>
+								<td>R$
+									{{ fatura.valor_taxaadministrativa |number_format(2, '.', ',') }}</td>
+								<td>
+									{% if fatura.status_fatura == 0 %}
+										<spam class="badge bg-info">
+											Em aberto
+										</spam>
+									{% elseif fatura.status_fatura == 1 %}
+										<spam class="badge bg-success">
+											Paga
+										</spam>
+									{% elseif fatura.status_fatura == 2 %}
+										<spam class="badge bg-warning">
+											Em atraso
+										</spam>
+									{% elseif fatura.status_fatura == 3 %}
+										<spam class="badge bg-secondary">
+											Cancelada
+										</spam>
+									{% endif %}
+								</td>
+
+								<td>
+									<b>{{ fatura.status_repasse == 0 ? '<spam class="badge bg-secondary">Não efetuado</spam>' : '<spam class="badge bg-sucess">Efetuado</span>'}}</b>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="detalhes" role="tabpanel" aria-labelledby="detalhes-tab">
+			<div class="mt-1">
+				<div class="mt-3 mb-3">
+					Situação do contrato:
+					<b>
+						{{contrato.status_contrato == 1 ? 'Ativo' : 'Inativo' }}</b>
+				</div>
+				<div class="row mt-2">
+					<div class="col-md-6 mt-1">
+						Locador:
+						<b>
+							{{contrato.imovel.locador.nome}}
+						</b>
+					</div>
+					<div class="col-md-6 mt-1">
+						Locatario:
+						<b>
+							{{ contrato.locatario.nome }}
+						</b>
+					</div>
+				</div>
+
+				<div class="row mt-2">
+					<div class="col-md-6 mt-1">
+						Inicio contrato:
+						<b>
+							{{contrato.data_inicio |date('m/d/Y')}}
+						</b>
+					</div>
+					<div class="col-md-6 mt-1">
+						Fim do contrato:
+						<b>
+							{{contrato.data_fim |date('m/d/Y')}}
+						</b>
+					</div>
+				</div>
+
+				<div class="row mt-5">
+					<div class="col-md-6 mt-1">
+						Valor Aluguel:
+						<b>
+							R$
+							{{contrato.valor_aluguel |number_format(2, '.', ',')}}
+						</b>
+					</div>
+					<div class="col-md-6 mt-1">
+						Valor Condomínio:
+						<b>
+							R$
+							{{contrato.valor_condominio |number_format(2, '.', ',')}}
+						</b>
+					</div>
+
+					<div class="col-md-6 mt-1">
+						Valor IPTU (Valor Mensal):
+						<b>
+							R$
+							{{contrato.valor_iptu |number_format(2, '.', ',')}}
+						</b>
+					</div>
+
+					<div class="col-md-6 mt-1">
+						Taxa Administrativa:
+						<b>
+							{{ contrato.taxa_administracao }}
+							%
+						</b>
+					</div>
+				</div>
+
+				<div class="row mt-5">
+					<h6 class="text-center">
+						Dados da Residência
+					</h6>
+					<div class="col-md-2 mt-1">
+						CEP:
+						<b>
+							{{contrato.imovel.cep}}
+						</b>
+					</div>
+					<div class="col-md-2 mt-1">
+						UF:
+						<b>
+							{{contrato.imovel.uf}}
+						</b>
+					</div>
+
+					<div class="col-md-3 mt-1">
+						Bairro:
+						<b>
+							{{contrato.imovel.bairro}}
+						</b>
+					</div>
+
+					<div class="col-md-5 mt-1">
+						Cidade:
+						<b>
+							{{contrato.imovel.cidade}}
+						</b>
+					</div>
+
+					<div class="col-md-5 mt-1">
+						Endereço:
+						<b>
+							{{contrato.imovel.endereco}}
+						</b>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	{{js | raw}}
 {% endblock %}

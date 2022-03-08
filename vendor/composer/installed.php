@@ -5,8 +5,8 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '3d8977e8b66a52f5ab54fd48629bdec88942147b',
-        'name' => 'wesley.vilaseca/projetocmsphp',
+        'reference' => 'a6b1c06d3ddba7e79c3754165a39b53c38e1d45a',
+        'name' => 'wesley.vilaseca/projeto-imobiliaria',
         'dev' => true,
     ),
     'versions' => array(
@@ -82,13 +82,13 @@
             'reference' => '972d8604a92b7054828b539f2febb0211dd5945c',
             'dev_requirement' => false,
         ),
-        'wesley.vilaseca/projetocmsphp' => array(
+        'wesley.vilaseca/projeto-imobiliaria' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '3d8977e8b66a52f5ab54fd48629bdec88942147b',
+            'reference' => 'a6b1c06d3ddba7e79c3754165a39b53c38e1d45a',
             'dev_requirement' => false,
         ),
     ),

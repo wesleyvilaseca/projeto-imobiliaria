@@ -4,6 +4,7 @@ namespace app\controllers\admin\catalog;
 
 use app\core\Controller;
 use app\models\ContratoAluguel;
+use app\models\Faturas;
 use app\models\Imoveis;
 use app\models\Locador;
 use app\models\Locatario;
@@ -21,6 +22,7 @@ class ContratoalugueldetalhesController extends Controller
     private $locador;
     private $imoveis;
     private $service;
+    private $faturas;
     private static $route = URL_BASE . 'admin-catalog-contratoalugueldetalhes';
 
     public function __construct()
@@ -34,6 +36,7 @@ class ContratoalugueldetalhesController extends Controller
         $this->locador      = new Locador;
         $this->imoveis      = new Imoveis;
         $this->service      = new ContratoAluguelService;
+        $this->faturas      = new Faturas;
     }
 
     public function index(int $id = null)
@@ -48,6 +51,8 @@ class ContratoalugueldetalhesController extends Controller
             setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
             return redirect(self::$route);
         }
+        $dados['contrato']          = $contrato;
+        $dados['faturas']           = $this->faturas->find("contrato_id=:contrato_id", "contrato_id={$contrato->id}")->fetch(true);
         $dados['usuario']           = $this->usuario;
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-home', 'title' => 'Painel de controle'];
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-contratoaluguel', 'title' => 'Contratos'];
