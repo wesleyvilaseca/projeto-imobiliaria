@@ -67,6 +67,22 @@ class ContratoalugueldetalhesController extends Controller
         destroydataform();
     }
 
+    public function getContrato(int $id = null)
+    {
+        if (!$id) {
+            setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
+            return redirect(self::$route);
+        }
+
+        $contrato = $this->repository->findById($id);
+        if (!$contrato) {
+            setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
+            return redirect(self::$route);
+        }
+
+        echo $contrato->contrato;
+    }
+
     private function js()
     {
         $js = $this->bootstrapjs();
