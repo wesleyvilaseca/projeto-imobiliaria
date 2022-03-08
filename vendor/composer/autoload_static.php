@@ -77,6 +77,16 @@ class ComposerStaticInit2dfe11ac089a852b5918f532db08720d
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'O' => 
+        array (
+            'OpenBoleto\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/openboleto/openboleto/src',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -86,6 +96,7 @@ class ComposerStaticInit2dfe11ac089a852b5918f532db08720d
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit2dfe11ac089a852b5918f532db08720d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit2dfe11ac089a852b5918f532db08720d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2dfe11ac089a852b5918f532db08720d::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit2dfe11ac089a852b5918f532db08720d::$classMap;
 
         }, null, ClassLoader::class);

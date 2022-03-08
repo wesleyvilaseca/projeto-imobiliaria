@@ -10,6 +10,10 @@ use app\models\Locador;
 use app\models\Locatario;
 use app\request\admin\catalog\ContratoAluguelRequest;
 use app\services\admin\catalog\ContratoAluguelService;
+
+use OpenBoleto\Banco\BancoDoBrasil;
+use OpenBoleto\Agente;
+
 use DateTime;
 
 class ContratoalugueldetalhesController extends Controller
@@ -18,10 +22,7 @@ class ContratoalugueldetalhesController extends Controller
     private $html;
     private $request;
     private $repository;
-    private $locatario;
-    private $locador;
-    private $imoveis;
-    private $service;
+
     private $faturas;
     private static $route = URL_BASE . 'admin-catalog-contratoalugueldetalhes';
 
@@ -81,6 +82,34 @@ class ContratoalugueldetalhesController extends Controller
         }
 
         echo $contrato->contrato;
+    }
+
+    public function boleto(int $contrato_id, int $fatura_id)
+    {
+        $fatura   = $this->faturas->find("contrato_id=:contrato_id and id=:id", "contrato_id={$contrato_id}&id={$fatura_id}")->fetch();
+
+        if(!$fatura) {
+            setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
+            return redirect(self::$route);
+        }
+
+        $sacado     = new Agente('Fernando Maia', '023.434.234-34', 'ABC 302 Bloco N', '72000-000', 'Brasília', 'DF');
+        $cedente    = new Agente('Empresa de cosméticos LTDA', '02.123.123/0001-11', 'CLS 403 Lj 23', '71000-000', 'Brasília', 'DF');
+
+        $boleto = new BancoDoBrasil(array(
+            // Parâmetros obrigatórios
+            'dataVencimento' => new DateTime('2013-01-24'),
+            'valor' => 23.00,
+            'sequencial' => 1234567, // Para gerar o nosso número
+            'sacado' => $sacado,
+            'cedente' => $cedente,
+            'agencia' => 1724, // Até 4 dígitos
+            'carteira' => 18,
+            'conta' => 10403005, // Até 8 dígitos
+            'convenio' => 1234, // 4, 6 ou 7 dígitos
+        ));
+
+        echo $boleto->getOutput();
     }
 
     private function js()

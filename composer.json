@@ -23,6 +23,7 @@
         "coffeecode/datalayer": "1.1.*",
         "coffeecode/uploader": "1.0.*",
         "coffeecode/paginator": "^1.0",
-        "naucon/htmlbuilder": "^1.0"
+        "naucon/htmlbuilder": "^1.0",
+        "openboleto/openboleto": "dev-master"
     }
 }
