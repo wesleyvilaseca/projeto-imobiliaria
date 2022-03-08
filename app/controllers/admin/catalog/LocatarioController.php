@@ -198,6 +198,8 @@ class LocatarioController extends Controller
     {
         $js = $this->bootstrapjs();
         $js .= $this->mask();
+        $js .= $this->datatableJquery();
+        $js .= $this->dataTableActive('locatario_table');
         return $js;
     }
 }

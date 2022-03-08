@@ -256,6 +256,8 @@ class ContratoaluguelController extends Controller
     {
         $js = $this->bootstrapjs();
         $js .= $this->mask();
+        $js .= $this->datatableJquery();
+        $js .= $this->dataTableActive('contrato_table');
         return $js;
     }
 }

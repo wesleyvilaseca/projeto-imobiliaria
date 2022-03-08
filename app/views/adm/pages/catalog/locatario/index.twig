@@ -15,7 +15,7 @@
 				<div class="col-xl-12 col-md-12 col-sm-12">
 					{% if locatarios %}
 						<div class="table-responsive">
-							<table class="table">
+							<table class="table" id="locatario_table">
 								<thead class="thead-dark">
 									<tr>
 										<th scope="col">Nome</th>
@@ -53,6 +53,8 @@
 				</div>
 			</div>
 
+		{{js | raw}}
+
 
 		<script>
 			function delet(id, nome) {
@@ -85,6 +87,4 @@
 				}
 			}
 		</script>
-
-					{{js | raw}}
 {% endblock %}

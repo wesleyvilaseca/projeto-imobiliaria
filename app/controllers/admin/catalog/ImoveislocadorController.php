@@ -223,6 +223,8 @@ class ImoveislocadorController extends Controller
     {
         $js = $this->bootstrapjs();
         $js .= $this->mask();
+        $js .= $this->datatableJquery();
+        $js .= $this->dataTableActive('imoveis_table');
         return $js;
     }
 }
