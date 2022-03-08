@@ -28,6 +28,8 @@
 								<th scope="col">Cidade</th>
 								<th scope="col">Bairro</th>
 								<th scope="col">Endereço</th>
+								<th scope="col">Status</th>
+								<th scope="col">Disponível</th>
 								<th scope="col">Ação</th>
 							</tr>
 						</thead>
@@ -40,6 +42,9 @@
 									<td>{{ imovel.cidade }}</td>
 									<td>{{ imovel.bairro }}</td>
 									<td>{{ imovel.endereco }}</td>
+									<td class="fw-bold">{{ imovel.status_imovel == 1 ? 'Ativo' : '<spam class="text-danger">Inativo</spam>' }}</td>
+									<td class="fw-bold">{{ imovel.imovelEmcontratoAtivo ? '<spam class="text-info">Sim</spam>' : '<spam class="text-success">Não</spam>' }}</td>
+
 									<td>
 										<a href="{{ URL_BASE }}admin-catalog-imoveislocador/edit/{{locador.id}}/{{imovel.id}}" class="btn btn-sm btn-warning" title="editar">
 											<i class="fas fa-edit"></i>

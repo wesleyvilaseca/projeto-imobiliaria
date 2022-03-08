@@ -35,7 +35,9 @@
 				<select class="form-select" id="locador_id" name="locador_id" onchange="selectlocador()">
 					<option selected disabled>Selecione uma opção</option>
 					{% for locador in locadores %}
-						<option value="{{locador.id}}" {{old.locador_id == locador.id ? 'selected' : contrato.locador_id == locador.id ? 'selected' : ''}}>{{locador.nome}}</option>
+						{% if locador.imovelDisponivel %}
+							<option value="{{locador.id}}" {{old.locador_id == locador.id ? 'selected' : contrato.locador_id == locador.id ? 'selected' : ''}}>{{locador.nome}}</option>
+						{% endif %}
 					{% endfor %}
 				</select>
 			</div>
@@ -99,13 +101,13 @@
 	<script src="{{ URL_BASE }}app/views/adm/pages/catalog/contratoaluguel/create.js"></script>
 
 	<script>
-		var locador_id 		= '{{ old ? old.locador_id : contrato ? contrato.locador_id}}';
-		var locatario_id 	= '{{ old ? old.locatario_id : contrato ? contrato.locatario_id}}';
-		var imovel_id 		= '{{ old ? old.imovel_id : contrato ? contrato.imovel_id}}';
+		var locador_id = '{{ old ? old.locador_id : contrato ? contrato.locador_id }}';
+var locatario_id = '{{ old ? old.locatario_id : contrato ? contrato.locatario_id }}';
+var imovel_id = '{{ old ? old.imovel_id : contrato ? contrato.imovel_id }}';
 
-		if (locador_id, imovel_id) {
-			selectlocador(locador_id)	
-		}
+if (locador_id, imovel_id) {
+selectlocador(locador_id)
+}
 	</script>
 
 {% endblock %}

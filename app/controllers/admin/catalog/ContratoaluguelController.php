@@ -54,6 +54,18 @@ class ContratoaluguelController extends Controller
 
     public function create()
     {
+        // $locador = $this->locador->find("status_locador =:status_locador", "status_locador=1")->fetch(true);
+
+        // foreach($locador as $l) {
+        //     // dd($l->imovelDisponivel);
+        //     if(!$l->imovelDisponivel){
+        //         dd($l);
+        //     }
+        // }
+
+        // dd('aqui');
+
+
         $dados['usuario']           = $this->usuario;
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-home', 'title' => 'Painel de controle'];
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-contratoaluguel', 'title' => 'Contratos'];
@@ -62,8 +74,8 @@ class ContratoaluguelController extends Controller
         $dados['route_back']        = URL_BASE . 'admin-catalog-contratoaluguel';
         $dados['title']             = 'Novo contrato';
         $dados["toptitle"]          = 'Novo contrato';
-        $dados['locatarios']        = $this->locatario->find()->fetch(true);
-        $dados['locadores']         = $this->locador->find()->fetch(true);
+        $dados['locatarios']        = $this->locatario->find("status_locatario =:status_locatario", "status_locatario=1")->fetch(true);
+        $dados['locadores']         = $this->locador->find("status_locador =:status_locador", "status_locador=1")->fetch(true);
         $dados['html']              = $this->html;
         $dados['js']                = $this->js();
 

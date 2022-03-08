@@ -107,6 +107,8 @@ class LocadorController extends Controller
         $locador->email         = $request['email'];
         $locador->telefone      = $request['telefone'];
         $locador->data_repasse  = $request['data_repasse'];
+        $locador->status_locador  = $request['status_locador'];
+
         $result                 = $locador->save();
 
         if (!$result) {
@@ -156,6 +158,7 @@ class LocadorController extends Controller
         $locador->email         = $request['email'];
         $locador->telefone      = $request['telefone'];
         $locador->data_repasse  = $request['data_repasse'];
+        $locador->status_locador  = $request['status_locador'];
 
         $result                 = $locador->save();
 

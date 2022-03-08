@@ -8,7 +8,7 @@ class Locador extends DataLayer
 {
     public function __construct()
     {
-        parent::__construct('locador', ['nome', 'email', 'data_repasse'], 'id', false);
+        parent::__construct('locador', ['nome', 'email', 'data_repasse', 'status_locador'], 'id', false);
     }
 
     public function existEmail(string $email)
@@ -19,5 +19,15 @@ class Locador extends DataLayer
     public function existTelefone(string $telefone)
     {
         return $this->find('telefone =:telefone', "telefone={$telefone}")->fetch();
+    }
+
+    public function imoveis()
+    {
+        return (new Imoveis)->find('locador_id =:locador_id', "locador_id={$this->id}")->fetch(true);
+    }
+
+    public function imovelDisponivel()
+    {
+        return (new Imoveis)->find('locador_id =:locador_id and status_imovel=:status_imovel', "locador_id={$this->id}&status_imovel=1")->fetch(true);
     }
 }

@@ -8,7 +8,7 @@ class Locatario extends DataLayer
 {
     public function __construct()
     {
-        parent::__construct('locatario', ['nome', 'email', 'telefone'], 'id', false);
+        parent::__construct('locatario', ['nome', 'email', 'telefone', 'status_locatario'], 'id', false);
     }
 
     public function existEmail(string $email)

@@ -42,6 +42,14 @@
 				</div>
 			</div>
 
+			<div class="form-group mb-2">
+				<small class="control-label">Status *</small>
+				<select class="form-select form-select-sm" id="status_locador" name="status_locador">
+					<option value="1" {{old.status_locador == 1 ? 'selected' : 1 == locador.status_locador ? 'selected' : ''}}>Ativo</option>
+					<option value="2" {{old.status_locador == 2 ? 'selected' : 2 == locador.status_locador ? 'selected' : ''}}>Inativo</option>
+				</select>
+			</div>
+
 			<hr>
 			<div class="row">
 				<div class="col-xl-6 col-md-12 mt-2">

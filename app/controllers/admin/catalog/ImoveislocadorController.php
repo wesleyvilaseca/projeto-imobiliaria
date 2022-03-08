@@ -141,6 +141,7 @@ class ImoveislocadorController extends Controller
         $imovel->uf             = $request['uf'];
         $imovel->cidade         = $request['cidade'];
         $imovel->complemento    = $request['complemento'];
+        $imovel->status_imovel  = $request['status_imovel'];
         $result                 = $imovel->save();
 
         if (!$result) {
@@ -178,6 +179,7 @@ class ImoveislocadorController extends Controller
         $imovel->uf             = $request['uf'];
         $imovel->cidade         = $request['cidade'];
         $imovel->complemento    = $request['complemento'];
+        $imovel->status_imovel  = $request['status_imovel'];
 
         $result                 = $imovel->save();
 

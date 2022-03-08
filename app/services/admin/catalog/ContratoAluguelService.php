@@ -7,6 +7,7 @@ use app\classes\supports\supports_cripto\Cripto;
 use app\classes\supports\supports_session\DataSession;
 use app\models\ContratoAluguel;
 use app\models\Faturas;
+use app\models\Imoveis;
 use DateTime;
 
 class ContratoAluguelService
@@ -17,11 +18,13 @@ class ContratoAluguelService
 
     private $contrato_aluguel;
     private $faturas;
+    private $imovel;
 
     public function __construct()
     {
         $this->contrato_aluguel = new ContratoAluguel;
         $this->faturas          = new Faturas;
+        $this->imovel           = new Imoveis;
     }
 
     public function get_dados(array $periodo_faturas, $request)
@@ -83,7 +86,18 @@ class ContratoAluguelService
 
     public function gerar_contrato(array $periodo_faturas, $request, $contrato)
     {
-        $dados_fatura = $this->get_dados($periodo_faturas, $request);
+        $imovel = $this->imovel->find("id =: id and status_imovel=:status_imovel", "id={$request['imovel_id']}&status_imovel=1")->fetch();
+        if (!$imovel) {
+            return false;
+        }
+        
+        $imovel->status_imovel  = 3;
+        $imovelId               = $imovel->save();
+        if (!$imovelId) {
+            return false;
+        }
+
+        $dados_fatura           = $this->get_dados($periodo_faturas, $request);
 
         $contrato_aluguel = new ContratoAluguel;
         $contrato_aluguel->locatario_id         = $request['locatario_id'];
@@ -98,7 +112,7 @@ class ContratoAluguelService
         $contrato_aluguel->contrato             = $contrato;
         $result                                 = $contrato_aluguel->save();
 
-        if(!$result) {
+        if (!$result) {
             return false;
         }
 

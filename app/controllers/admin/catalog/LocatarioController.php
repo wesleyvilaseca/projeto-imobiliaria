@@ -102,11 +102,12 @@ class LocatarioController extends Controller
         }
 
 
-        $client              = $this->repository;
-        $client->nome        = $request['nome'];
-        $client->email       = $request['email'];
-        $client->telefone    = $request['telefone'];
-        $result                 = $client->save();
+        $locatario                      = $this->repository;
+        $locatario->nome                = $request['nome'];
+        $locatario->email               = $request['email'];
+        $locatario->telefone            = $request['telefone'];
+        $locatario->status_locatario    = $request['status_locatario'];
+        $result                         = $locatario->save();
 
         if (!$result) {
             setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);
@@ -125,8 +126,8 @@ class LocatarioController extends Controller
             setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
         }
 
-        $client = $this->repository->findById($id);
-        if (!$client) {
+        $locatario = $this->repository->findById($id);
+        if (!$locatario) {
             redirect(self::$route);
             setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
         }
@@ -134,7 +135,7 @@ class LocatarioController extends Controller
 
         $request =  $this->request->save(filterpost($_POST));
 
-        if ($client->email !== $request['email']) {
+        if ($locatario->email !== $request['email']) {
             $exist = $this->repository->existEmail($request['email']);
             if ($exist) {
                 setmessage(['tipo' => 'warning', 'msg' => 'Já existe um cadastro de locatario com esse email']);
@@ -143,7 +144,7 @@ class LocatarioController extends Controller
             }
         }
 
-        if ($client->telefone !== $request['telefone']) {
+        if ($locatario->telefone !== $request['telefone']) {
             $exist = $this->repository->existTelefone($request['telefone']);
             if ($exist) {
                 setmessage(['tipo' => 'warning', 'msg' => 'Já existe um cadastro de locatario com esse telefone']);
@@ -152,11 +153,12 @@ class LocatarioController extends Controller
             }
         }
 
-        $client->nome        = $request['nome'];
-        $client->email       = $request['email'];
-        $client->telefone    = $request['telefone'];
+        $locatario->nome                = $request['nome'];
+        $locatario->email               = $request['email'];
+        $locatario->telefone            = $request['telefone'];
+        $locatario->status_locatario    = $request['status_locatario'];
 
-        $result                 = $client->save();
+        $result                         = $locatario->save();
 
         if (!$result) {
             setmessage(['tipo' => 'success', 'msg' => 'Erro na operação, tente novamente']);
@@ -179,12 +181,12 @@ class LocatarioController extends Controller
             return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
         }
 
-        $client = $this->repository->findById($id);
-        if (!$client) {
+        $locatario = $this->repository->findById($id);
+        if (!$locatario) {
             return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
         }
 
-        $result = $client->destroy();
+        $result = $locatario->destroy();
         if (!$result) {
             return response_json(['msg' => 'Erro na operação', 'success' => false]);
         }

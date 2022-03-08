@@ -17,7 +17,7 @@
 			<div class="form-group mb-2">
 				<small class="control-label">Nome *</small>
 				<div>
-					<input class="form-control form-control-sm" id="nome" name="nome" type="text" style="width:100%" value="{{ old ? old.nome : locatario ? locatario.nome : ''}}"  minlength="5" required>
+					<input class="form-control form-control-sm" id="nome" name="nome" type="text" style="width:100%" value="{{ old ? old.nome : locatario ? locatario.nome : ''}}" minlength="5" required>
 				</div>
 			</div>
 
@@ -33,6 +33,14 @@
 				<div>
 					<input class="form-control form-control-sm telefone" id="telefone" name="telefone" type="text" style="width:100%" value="{{ old ? old.telefone : locatario ? locatario.telefone : ''}}" minlength="15" required>
 				</div>
+			</div>
+
+			<div class="form-group mb-2">
+				<small class="control-label">Status *</small>
+				<select class="form-select form-select-sm" id="status_locatario" name="status_locatario">
+					<option value="1" {{old.status_locatario == 1 ? 'selected' : 1 == locatario.status_locatario ? 'selected' : ''}}>Ativo</option>
+					<option value="2" {{old.status_locatario == 2 ? 'selected' : 2 == locatario.status_locatario ? 'selected' : ''}}>Inativo</option>
+				</select>
 			</div>
 			<hr>
 			<div class="row">
