@@ -32,4 +32,9 @@ class Faturas extends DataLayer
         $sql = "update faturas set status_fatura=3 where contrato_id={$contrato_id} and status_fatura=0 or status_fatura=2";
         return $this->db->query($sql);
     }
+
+    public function insert($data)
+    {
+        
+    }
 }

@@ -123,8 +123,8 @@
 		var imovel_id = '{{ old ? old.imovel_id : contrato ? contrato.imovel_id }}';
 
 		if (locador_id, imovel_id) {
+			$("#locador_id").prop('disabled', false);
 			selectlocador(locador_id)
-		
 		}
 
 		function select_locatario() {
