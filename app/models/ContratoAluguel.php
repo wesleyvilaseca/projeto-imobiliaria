@@ -6,6 +6,12 @@ use CoffeeCode\DataLayer\DataLayer;
 
 class ContratoAluguel extends DataLayer
 {
+    /**
+     * status contrato
+     * 1 - ativo
+     * 2 - cancelado
+     * 3 - encerrado por tempo
+     */
     public function __construct()
     {
         parent::__construct('contrato_aluguel', ['locatario_id', 'imovel_id', 'contrato', 'data_inicio', 'data_fim', 'taxa_administracao', 'valor_aluguel', 'valor_condominio', 'valor_iptu'], 'id', false);

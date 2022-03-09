@@ -53,7 +53,8 @@ class ContratoalugueldetalhesController extends Controller
             setmessage(['tipo' => 'error', 'msg' => 'Operação não autorizada']);
             return redirect(self::$route);
         }
-        $dados['contrato']          = $contrato;
+        $dados['contrato']                  = $contrato;
+        $dados['action_inativarcontrato']   = self::$route . '/inativarcontrato/' . $contrato->id;
         $dados['faturas']           = $this->faturas->find("contrato_id=:contrato_id", "contrato_id={$contrato->id}")->fetch(true);
         $dados['usuario']           = $this->usuario;
         $dados['breadcrumb'][]      = ['route' => URL_BASE . 'admin-catalog-home', 'title' => 'Painel de controle'];
@@ -107,7 +108,7 @@ class ContratoalugueldetalhesController extends Controller
             'cedente' => $cedente,
             'agencia' => 4451, // Até 4 dígitos
             'carteira' => 18,
-            'conta' => 2428-7, // Até 8 dígitos
+            'conta' => 2428 - 7, // Até 8 dígitos
             'convenio' => 1234, // 4, 6 ou 7 dígitos
         ));
 
@@ -271,6 +272,38 @@ class ContratoalugueldetalhesController extends Controller
         }
 
         setmessage(['tipo' => 'success', 'msg' => 'Status do repasse atualizado com sucesso!']);
+        return redirect(self::$route . '/index/' . $contrato_id);
+    }
+
+    public function inativarcontrato(int $contrato_id)
+    {
+        if (!$contrato_id) {
+            setmessage(['tipo' => 'warning', 'msg' => 'Operação não autorizada']);
+            return redirect(self::$route);
+        }
+
+        $contrato = $this->repository->find("id=:id and status_contrato=1", "id={$contrato_id}")->fetch();
+        if (!$contrato) {
+            setmessage(['tipo' => 'warning', 'msg' => 'Operação não autorizada']);
+            return redirect(self::$route);
+        }
+
+        $contrato->status_contrato = 2;
+        $result = $contrato->save();
+
+        $result = $this->faturas->cancelaFaturas($contrato_id);
+        if (!$result) {
+            setmessage(['tipo' => 'warning', 'msg' => 'Operação não autorizada 1']);
+            return redirect(self::$route . '/index/' . $contrato_id);
+        }
+
+        $result = $this->faturas->cancelaFaturas($contrato_id);
+        if (!$result) {
+            setmessage(['tipo' => 'warning', 'msg' => 'Operação não autorizada']);
+            return redirect(self::$route . '/index/' . $contrato_id);
+        }
+
+        setmessage(['tipo' => 'success', 'msg' => 'Contrato cancelado com sucesso']);
         return redirect(self::$route . '/index/' . $contrato_id);
     }
 

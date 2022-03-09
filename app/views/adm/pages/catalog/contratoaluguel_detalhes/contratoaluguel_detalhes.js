@@ -56,6 +56,11 @@ function modal_fatura(fatura_id, contrato_id) {
     });
 }
 
+function status_contrato() {
+    var m = new bootstrap.Modal(document.getElementById('desativar_contrato'))
+    m.show()
+}
+
 function close_modal(id) {
     return $(`#${id}`).hide('modal');
 }

@@ -90,9 +90,11 @@
 								</td>
 
 								<td>
-									<a href="{{ URL_BASE }}admin-catalog-contratoalugueldetalhes/boleto/{{ contrato.id }}/{{ fatura.id }}" class="btn btn-sm btn-primary" title="boleto">
-										<i class="fas fa-print"></i>
-									</a>
+									{% if contrato.status_contrato == 1%}
+										<a href="{{ URL_BASE }}admin-catalog-contratoalugueldetalhes/boleto/{{ contrato.id }}/{{ fatura.id }}" class="btn btn-sm btn-primary" title="boleto">
+											<i class="fas fa-print"></i>
+										</a>
+									{% endif %}
 								</td>
 							</tr>
 						{% endfor %}
@@ -105,8 +107,21 @@
 			<div class="mt-1">
 				<div class="mt-3 mb-3">
 					Situação do contrato:
-					<b>
-						{{contrato.status_contrato == 1 ? 'Ativo' : 'Inativo' }}</b>
+
+					{% if contrato.status_contrato == 1  %}
+						<spam style="cursor:pointer;" class="badge bg-success" onclick="status_contrato()">
+							Ativo
+						</span>
+					{% elseif contrato.status_contrato == 3 %}
+						<spam style="cursor:pointer;" class="badge bg-info" onclick="status_contrato()">
+							Encerrado
+						</span>
+					{% elseif contrato.status_contrato == 2 %}
+						<spam style="cursor:pointer;" class="badge bg-secondary" onclick="status_contrato()">
+							Cancelado
+						</span>
+					{% endif %}
+
 				</div>
 				<div class="row mt-2">
 					<div class="col-md-6 mt-1">
@@ -228,8 +243,34 @@
 	</div>
 
 
+	<!-- Modal -->
+	<div class="modal fade" id="desativar_contrato" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<form method="POST" action="{{ action_inativarcontrato }}">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staticBackdropLabel">Inativar o contrato</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<h5 class="text-danger text-center">Atenção
+						</h5>
+						<p>
+							Atenção, ao clickar em 'Inativar o contrato', todas as faturas com status 'Em aberto' iram ser canceladas e o contrato em questão cancelado.</p>
+						<p>
+							Tem certeza que deseja Inativar este contrato?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Fechar</button>
+						<button type="submit" class="btn btn-sm btn-dark">Inativar o contrato</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
 	{{js | raw}}
 
 	<script src="{{ URL_BASE }}app/views/adm/pages/catalog/contratoaluguel_detalhes/contratoaluguel_detalhes.js"></script>
-
 {% endblock %}

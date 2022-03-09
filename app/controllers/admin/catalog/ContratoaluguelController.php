@@ -114,6 +114,13 @@ class ContratoaluguelController extends Controller
     public function store()
     {
         $request =  $this->request->post();
+        $current_date = date('Y-m-d');
+
+        if($request['data_inicio'] < $current_date) {
+            setmessage(['tipo' => 'warning', 'msg' => 'A data de inicio do contrato não pode ser menor que a data atual']);
+            setdataform($request);
+            return redirect(self::$route . '/create');
+        }
 
         if ($request['data_inicio'] > $request['data_fim']) {
             setmessage(['tipo' => 'warning', 'msg' => 'A data do fim do contrato não pode ser menor que a data inicial']);
