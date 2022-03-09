@@ -254,7 +254,7 @@ abstract class DataLayer
             /** Update */
             if (!empty($this->data->$primary)) {
                 $id = $this->data->$primary;
-                $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
+                $u = $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
             }
 
             /** Create */

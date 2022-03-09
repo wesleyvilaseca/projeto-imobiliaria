@@ -18,6 +18,12 @@
 		</a>
 	</div>
 
+	{% if locatarios == false %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			Atenção, não existe locatário disponível
+		</div>
+	{% endif %}
+
 	{% if exist_imovel == false %}
 		<div class="alert alert-warning alert-dismissible fade show" role="alert">
 			Atenção, não existe imovel disponível para locação
@@ -25,83 +31,86 @@
 	{% endif %}
 
 	<div>
-		<form method="POST" action="{{ action }}">
-			<div class="form-group mb-2">
-				<small class="control-label">Selecione o Locatario *</small>
-				<select class="form-select" name="locatario_id" onchange="">
-					<option selected disabled>Selecione uma opção</option>
-					{% for locatario in locatarios %}
-						<option value="{{locatario.id}}" {{old.locatario_id == locatario.id ? 'selected' : contrato.locatario_id == locatario.id ? 'selected' : ''}}>{{locatario.nome}}</option>
-					{% endfor %}
-				</select>
-			</div>
-
-			{% if exist_imovel %}
+		{% if locatarios %}
+			<form method="POST" action="{{ action }}">
 				<div class="form-group mb-2">
-					<small class="control-label">Selecione o Locador *</small>
-					<select class="form-select" id="locador_id" name="locador_id" onchange="selectlocador()">
+					<small class="control-label">Selecione o Locatario *</small>
+					<select class="form-select" name="locatario_id" onchange="">
 						<option selected disabled>Selecione uma opção</option>
-						{% for locador in locadores %}
-							{% if locador.imovelDisponivel %}
-								<option value="{{locador.id}}" {{old.locador_id == locador.id ? 'selected' : contrato.locador_id == locador.id ? 'selected' : ''}}>{{locador.nome}}</option>
-							{% endif %}
+						{% for locatario in locatarios %}
+							<option value="{{locatario.id}}" {{old.locatario_id == locatario.id ? 'selected' : contrato.locatario_id == locatario.id ? 'selected' : ''}}>{{locatario.nome}}</option>
 						{% endfor %}
 					</select>
 				</div>
-			{% endif %}
 
-			<div class="form-group mb-2 selectimovel"></div>
 
-			<div class="row taxas">
-				<div class="form-group mb-2">
-					<small class="control-label">Data de inicio do contrato *</small>
-					<div>
-						<input class="form-control form-control-sm" name="data_inicio" type="date" style="width:100%" value="{{ old ? old.data_inicio : contrato ? contrato.data_inicio : ''}}">
+				{% if exist_imovel %}
+					<div class="form-group mb-2">
+						<small class="control-label">Selecione o Locador *</small>
+						<select class="form-select" id="locador_id" name="locador_id" onchange="selectlocador()">
+							<option selected disabled>Selecione uma opção</option>
+							{% for locador in locadores %}
+								{% if locador.imovelDisponivel %}
+									<option value="{{locador.id}}" {{old.locador_id == locador.id ? 'selected' : contrato.locador_id == locador.id ? 'selected' : ''}}>{{locador.nome}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+				{% endif %}
+
+				<div class="form-group mb-2 selectimovel"></div>
+
+				<div class="row taxas">
+					<div class="form-group mb-2">
+						<small class="control-label">Data de inicio do contrato *</small>
+						<div>
+							<input class="form-control form-control-sm" name="data_inicio" type="date" style="width:100%" value="{{ old ? old.data_inicio : contrato ? contrato.data_inicio : ''}}">
+						</div>
+					</div>
+
+					<div class="form-group mb-2">
+						<small class="control-label">Data de fim do contrato *</small>
+						<div>
+							<input class="form-control form-control-sm" name="data_fim" type="date" style="width:100%" value="{{ old ? old.data_fim : contrato ? contrato.data_fim : ''}}">
+						</div>
+					</div>
+
+					<div class="form-group mb-2">
+						<small class="control-label">Taxa admininstração * (valor percentual)</small>
+						<div>
+							<input class="form-control form-control-sm" placeholder="5" name="taxa_administracao" type="number" style="width:100%" value="{{ old ? old.taxa_administracao : contrato ? contrato.taxa_administracao : ''}}" min="0" max="100">
+						</div>
+					</div>
+
+					<div class="form-group mb-2">
+						<small class="control-label">Valor do aluguel *</small>
+						<div>
+							<input class="form-control form-control-sm" placeholder="800" name="valor_aluguel" type="number" style="width:100%" value="{{ old ? old.valor_aluguel : contrato ? contrato.valor_aluguel : ''}}" min="0">
+						</div>
+					</div>
+
+					<div class="form-group mb-2">
+						<small class="control-label">Valor do condomínio *</small>
+						<div>
+							<input class="form-control form-control-sm" placeholder="250" name="valor_condominio" type="number" style="width:100%" value="{{ old ? old.valor_condominio : contrato ? contrato.valor_condominio : ''}}" min="0">
+						</div>
+					</div>
+
+					<div class="form-group mb-2">
+						<small class="control-label">Valor do iptu *</small>
+						<div>
+							<input class="form-control form-control-sm" placeholder="100" name="valor_iptu" type="number" style="width:100%" value="{{ old ? old.valor_iptu : contrato ? contrato.valor_iptu : ''}}" min="0">
+						</div>
 					</div>
 				</div>
 
-				<div class="form-group mb-2">
-					<small class="control-label">Data de fim do contrato *</small>
-					<div>
-						<input class="form-control form-control-sm" name="data_fim" type="date" style="width:100%" value="{{ old ? old.data_fim : contrato ? contrato.data_fim : ''}}">
+				<div class="row taxas">
+					<div class="col-xl-6 col-md-12 mt-2">
+						<button type="submit" class="btn btn-sm btn-primary">{{ locador ? 'Editar' : 'Salvar'}}</button>
 					</div>
 				</div>
-
-				<div class="form-group mb-2">
-					<small class="control-label">Taxa admininstração * (valor percentual)</small>
-					<div>
-						<input class="form-control form-control-sm" placeholder="5" name="taxa_administracao" type="number" style="width:100%" value="{{ old ? old.taxa_administracao : contrato ? contrato.taxa_administracao : ''}}" min="0" max="100">
-					</div>
-				</div>
-
-				<div class="form-group mb-2">
-					<small class="control-label">Valor do aluguel *</small>
-					<div>
-						<input class="form-control form-control-sm" placeholder="800" name="valor_aluguel" type="number" style="width:100%" value="{{ old ? old.valor_aluguel : contrato ? contrato.valor_aluguel : ''}}" min="0">
-					</div>
-				</div>
-
-				<div class="form-group mb-2">
-					<small class="control-label">Valor do condomínio *</small>
-					<div>
-						<input class="form-control form-control-sm" placeholder="250" name="valor_condominio" type="number" style="width:100%" value="{{ old ? old.valor_condominio : contrato ? contrato.valor_condominio : ''}}" min="0">
-					</div>
-				</div>
-
-				<div class="form-group mb-2">
-					<small class="control-label">Valor do iptu *</small>
-					<div>
-						<input class="form-control form-control-sm" placeholder="100" name="valor_iptu" type="number" style="width:100%" value="{{ old ? old.valor_iptu : contrato ? contrato.valor_iptu : ''}}" min="0">
-					</div>
-				</div>
-			</div>
-
-			<div class="row taxas">
-				<div class="col-xl-6 col-md-12 mt-2">
-					<button type="submit" class="btn btn-sm btn-primary">{{ locador ? 'Editar' : 'Salvar'}}</button>
-				</div>
-			</div>
-		</form>
+			</form>
+		{% endif %}
 	</div>
 
 	{{js | raw}}

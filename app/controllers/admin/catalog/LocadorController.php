@@ -3,6 +3,7 @@
 namespace app\controllers\admin\catalog;
 
 use app\core\Controller;
+use app\models\Imoveis;
 use app\models\Locador;
 use app\request\admin\catalog\LocadorRequest;
 
@@ -12,6 +13,7 @@ class LocadorController extends Controller
     private $html;
     private $request;
     private $repository;
+    private $imoveis;
     private static $route = URL_BASE . 'admin-catalog-locador';
 
     public function __construct()
@@ -21,6 +23,7 @@ class LocadorController extends Controller
         $this->html[]       = $this->load()->controller('admin-common-sidemenu');
         $this->request      = new LocadorRequest;
         $this->repository   = new Locador;
+        $this->imoveis      = new Imoveis;
     }
 
     public function index()
@@ -183,12 +186,23 @@ class LocadorController extends Controller
             return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
         }
 
-        $client = $this->repository->findById($id);
-        if (!$client) {
+        $locador = $this->repository->findById($id);
+        if (!$locador) {
             return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
         }
 
-        $result = $client->destroy();
+        foreach ($locador->imoveis as $imovel) {
+            if ($imovel->imovelEmContrato) {
+                return response_json(['msg' => 'Não é possivel removel este locador, pois ele possui residencia(s) com contrato(s) vinculado(s)', 'success' => false]);
+            }
+        }
+
+        $result = $this->imoveis->destroy_imoveis($locador->id);
+        if (!$result) {
+            return response_json(['msg' => 'Erro na operação', 'success' => false]);
+        }
+
+        $result = $locador->destroy();
         if (!$result) {
             return response_json(['msg' => 'Erro na operação', 'success' => false]);
         }

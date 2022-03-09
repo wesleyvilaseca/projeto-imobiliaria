@@ -186,6 +186,10 @@ class LocatarioController extends Controller
             return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
         }
 
+        if ($locatario->contrato) {
+            return response_json(['msg' => 'Não é possível remover o locatário, pois existe(m) contrato(s) vinculado(s) a ele!', 'success' => false]);
+        }
+
         $result = $locatario->destroy();
         if (!$result) {
             return response_json(['msg' => 'Erro na operação', 'success' => false]);

@@ -35,10 +35,11 @@
 							<th scope="col">Valor fatura</th>
 							<th scope="col">Data vencimento</th>
 							<th scope="col">Valor Repasse</th>
-							<th scope="col">Valor taxa administrativa</th>
+							<th scope="col">Valor taxa adm</th>
+							<th scope="col">Data repasse</th>
 							<th scope="col">Status fatura</th>
 							<th scope="col">Status repasse</th>
-							<th scope="col">Ação</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -47,38 +48,51 @@
 							<tr>
 								<td>R$
 									{{ fatura.valor_fatura |number_format(2, '.', ',') }}</td>
-								<td>{{ fatura.data_vencimento |date('m/d/Y') }}</td>
+								<td>{{ fatura.data_vencimento |date('d/m/Y') }}</td>
 								<td>R$
 									{{ fatura.valor_repasse |number_format(2, '.', ',') }}</td>
 								<td>R$
 									{{ fatura.valor_taxaadministrativa |number_format(2, '.', ',') }}</td>
+
+								<td>{{ fatura.data_repasse |date('d/m/Y') }}</td>
+
 								<td>
 									{% if fatura.status_fatura == 0 %}
-										<spam class="badge bg-info">
-											Em aberto
-										</spam>
+										<b style="cursor:pointer" onclick="modal_fatura('{{fatura.id}}', '{{fatura.contrato_id}}')">
+											<spam class="badge bg-info">
+												Em aberto
+											</spam>
+										</b>
 									{% elseif fatura.status_fatura == 1 %}
 										<spam class="badge bg-success">
 											Paga
 										</spam>
 									{% elseif fatura.status_fatura == 2 %}
-										<spam class="badge bg-warning">
-											Em atraso
-										</spam>
+										<b style="cursor:pointer" onclick="modal_fatura('{{fatura.id}}', '{{fatura.contrato_id}}')">
+											<spam class="badge bg-warning">
+												Em atraso
+											</spam>
+										</b>
 									{% elseif fatura.status_fatura == 3 %}
 										<spam class="badge bg-secondary">
 											Cancelada
 										</spam>
 									{% endif %}
+
 								</td>
 
 								<td>
-									<b>{{ fatura.status_repasse == 0 ? '<spam class="badge bg-secondary">Não efetuado</spam>' : '<spam class="badge bg-sucess">Efetuado</span>'}}</b>
+									{% if fatura.status_fatura == 1 and fatura.status_repasse == 0 %}
+										<b style="cursor:pointer" onclick="modal_repasse('{{contrato.id}}', '{{fatura.id}}', '{{fatura.status_repasse}}')">{{ fatura.status_repasse == 0 ? '<spam class="badge bg-secondary">Não efetuado</spam>' : '<spam class="badge bg-sucess">Efetuado</span>'}}</b>
+									{% else %}
+										<b>{{ fatura.status_repasse == 0 ? '<spam class="badge bg-secondary">Não efetuado</spam>' : '<spam class="badge bg-success">Efetuado</span>'}}</b>
+									{% endif %}
 								</td>
 
 								<td>
-									<button class="btn btn-sm btn-dark" title="edit"><i class="fas fa-edit"></i></button>
-									<a href="{{ URL_BASE }}admin-catalog-contratoalugueldetalhes/boleto/{{ contrato.id }}/{{ fatura.id }}" class="btn btn-sm btn-primary" title="boleto"><i class="fas fa-print"></i></a>
+									<a href="{{ URL_BASE }}admin-catalog-contratoalugueldetalhes/boleto/{{ contrato.id }}/{{ fatura.id }}" class="btn btn-sm btn-primary" title="boleto">
+										<i class="fas fa-print"></i>
+									</a>
 								</td>
 							</tr>
 						{% endfor %}
@@ -199,6 +213,23 @@
 		</div>
 	</div>
 
+	<!-- Modal statusfatura-->
+	<div class="modal fade" id="modal_fatura" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content content_modal_fatura"></div>
+		</div>
+	</div>
+
+	<!-- Modal status repasse-->
+	<div class="modal fade" id="modal_repasse" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content content_modal_repasse"></div>
+		</div>
+	</div>
+
 
 	{{js | raw}}
+
+	<script src="{{ URL_BASE }}app/views/adm/pages/catalog/contratoaluguel_detalhes/contratoaluguel_detalhes.js"></script>
+
 {% endblock %}

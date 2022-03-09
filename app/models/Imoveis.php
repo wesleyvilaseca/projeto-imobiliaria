@@ -3,11 +3,16 @@
 namespace app\models;
 
 use CoffeeCode\DataLayer\DataLayer;
+use CoffeeCode\DataLayer\Connect;
 
 class Imoveis extends DataLayer
 {
+    private $db;
+
     public function __construct()
     {
+        $this->db = Connect::getInstance();
+
         parent::__construct('imoveis', ['locador_id', 'cep', 'endereco', 'bairro', 'uf', 'cidade', 'complemento', 'status_imovel'], 'id', false);
     }
 
@@ -26,8 +31,18 @@ class Imoveis extends DataLayer
         return (new ContratoAluguel)->find('imovel_id =:imovel_id and status_contrato=:status_contrato', "imovel_id={$this->id}&status_contrato=1")->fetch();
     }
 
+    public function imovelEmContrato()
+    {
+        return (new ContratoAluguel)->find('imovel_id =:imovel_id', "imovel_id={$this->id}")->fetch();
+    }
+
     public function locador()
     {
         return (new Locador)->find('id =:id', "id={$this->locador_id}")->fetch();
+    }
+
+    public function destroy_imoveis($locador_id) {
+        $sql = "delete from imoveis where locador_id={$locador_id}";
+        return  $this->db->query($sql);
     }
 }

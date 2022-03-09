@@ -27,18 +27,24 @@ class ContratoAluguelService
         $this->imovel           = new Imoveis;
     }
 
-    public function get_dados(array $periodo_faturas, $request)
+    public function get_dados(array $periodo_faturas, $request, $drepasse)
     {
-        $suport = function ($data, $request, $periodo_faturas, $position) {
-            if ($data->format('d') !== "01") {
+        $drepasse =  $drepasse >= 10 ? $drepasse : 0 . $drepasse;
 
+        $suport = function ($data, $request, $periodo_faturas, $position, $drepasse) {
+
+            $data_repasse = new DateTime($periodo_faturas[$position]);
+
+            if ($data->format('d') !== "01") {
                 $days = cal_days_in_month(CAL_GREGORIAN, $data->format('n'), $data->format('y'));
                 $diff = $days == $data->format('d') ? $days : $days - $data->format('d');
 
                 if ($position !== 1) {
                     $diff = $data->format('d');
+                    $data_repasse = date("Y-m-d", strtotime("+1 month", strtotime($data_repasse->format('Y-m-' . $drepasse))));
                 } else {
                     $diff = $days == $data->format('d') ? $days : $days - $data->format('d');
+                    $data_repasse =  $data_repasse->format('Y-m-' . $drepasse);
                 }
 
                 $condiminio     = tofloat($request['valor_condominio']) / $days;
@@ -52,7 +58,8 @@ class ContratoAluguelService
                     'valor_fatura'  => $total_fatura = tofloat($aluguel + $valor_iptu + $valor_condominio),
                     'taxa_adm'      => $taxa_adm = porcentagem($total_fatura, $request['taxa_administracao']),
                     'valor_repasse' => $total_fatura - $valor_condominio - $taxa_adm,
-                    'parcela_concorrente' => $position
+                    'parcela_concorrente' => $position,
+                    'data_repasse'        => $data_repasse
                 ];
             }
             return (object) [
@@ -63,7 +70,8 @@ class ContratoAluguelService
                 'valor_fatura'  => $total_fatura = tofloat($request['valor_aluguel'] + $request['valor_iptu'] + $request['valor_condominio']),
                 'taxa_adm'      => $taxa_adm = porcentagem($total_fatura, $request['taxa_administracao']),
                 'valor_repasse' => $total_fatura - $valor_condominio - $taxa_adm,
-                'parcela_concorrente' => $position
+                'parcela_concorrente' => $position,
+                'data_repasse'        => $data_repasse->format('Y-m-' . $drepasse)
             ];
         };
 
@@ -77,7 +85,7 @@ class ContratoAluguelService
             //se a possição do array for a penultima, eu pulo ela, porque pode ser que ela não feche no dia primeiro
             if ($key == ($qtd - 1)) continue;
 
-            $array[] = $suport($data, $request, $periodo_faturas, $position);
+            $array[] = $suport($data, $request, $periodo_faturas, $position, $drepasse);
         }
 
         //acho que é isso
@@ -91,7 +99,7 @@ class ContratoAluguelService
             return false;
         }
 
-        $dados_fatura           = $this->get_dados($periodo_faturas, $request);
+        $dados_fatura           = $this->get_dados($periodo_faturas, $request, $imovel->locador->data_repasse);
 
         $contrato_aluguel = new ContratoAluguel;
         $contrato_aluguel->locatario_id         = $request['locatario_id'];
@@ -124,6 +132,7 @@ class ContratoAluguelService
             $fatura->status_fatura          = 0;
             $fatura->parcela_concorrente    = $f->parcela_concorrente;
             $fatura->status_repasse         = 0;
+            $fatura->data_repasse           = $f->data_repasse;
             $faturaId                       = $fatura->save();
 
             if (!$faturaId) {
