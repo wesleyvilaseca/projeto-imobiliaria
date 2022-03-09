@@ -38,17 +38,9 @@ e após feito isso, exporte para o seu novo banco de dados o arquivo imobiliaria
 
 Concluido essa etapa, no arquivo ./config/config.php informe as credênciais para conexão com o seu banco de dados, como no exemplo abaixo
 
-define("DATA_LAYER_CONFIG", [
-    "driver" => "mysql", -> driver de conexão, no nosso caso é mysql
-    "host" => "localhost", -> seu host
-    "port" => "3306", -> sua porta de conexão 
-    "dbname" => "imobiliaria", -> seu banco
-    "username" => "root", -> seu usuário
-    "passwd" => "", -> senha do usuario
-    "options" => [
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-        PDO::ATTR_CASE => PDO::CASE_NATURAL
-    ]
-]);
+     - "driver" => "mysql", -> driver de conexão, no nosso caso é mysql
+     - "host" => "localhost", -> seu host
+     - "port" => "3306", -> sua porta de conexão 
+     - "dbname" => "imobiliaria", -> seu banco
+     - "username" => "root", -> seu usuário
+     - "passwd" => "", -> senha do usuario
