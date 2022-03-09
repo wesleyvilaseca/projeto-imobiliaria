@@ -210,6 +210,10 @@ class ImoveislocadorController extends Controller
             return response_json(['msg' => 'Operação não autorizada', 'success' => false]);
         }
 
+        if($imovel->imovelEmContrato){
+            return response_json(['msg' => 'Não é possivel remover o imovel, ele possui vinculo(s) com contrato(s)', 'success' => false]);
+        }
+
         $result = $imovel->destroy();
         if (!$result) {
             return response_json(['msg' => 'Erro na operação', 'success' => false]);

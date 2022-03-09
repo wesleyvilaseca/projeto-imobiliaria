@@ -47,7 +47,8 @@ class Core
         if (EM_MANUTENCAO) {
             $this->controller = 'MaintenanceController';
         } else {
-            $url = explode("index.php", $_SERVER["PHP_SELF"]);
+            $url = explode("index.php", $_SERVER["PHP_SELF"]); 
+            // $url = explode("index.php", $_SERVER["REQUEST_URI"]);
             $url = end($url);
             if ($url != "") {
                 $url = explode('/', $url);
