@@ -25,7 +25,9 @@ Arquitetura
 web online
 https://imobiliaria.codevila.com.br
 
-Abaixo o modelo do dimensionamento do banco 
+No diretório ./DB existe o arquivo Modelagem BD Imobiliaria.mwb que é o diagrama do projeto
+
+Abaixo o imagem do diagrama do banco de dados 
 
 <p align="center">
 <a href="#"><img src="https://github.com/wesleyvilaseca/projeto-imobiliaria/blob/master/DB/Modelagem%20BD%20Imobiliaria.png" alt="modelo_banco"></a>
@@ -33,7 +35,7 @@ Abaixo o modelo do dimensionamento do banco
 
 Orientações para subir projeto no seu servidor
 
-No MySQL do seu servidor, crie um baco de dados como o nome que preferir (sujestão: imobiliaria)
+No MySQL do seu servidor, crie um banco de dados com o nome que preferir (sujestão: imobiliaria)
 e após feito isso, exporte para o seu novo banco de dados o arquivo imobiliaria.sql que se encontrada no diretório ./DB
 
 Concluido essa etapa, no arquivo ./config/config.php informe as credênciais para conexão com o seu banco de dados, como no exemplo abaixo
