@@ -25,7 +25,7 @@ Arquitetura
 web online
 https://imobiliaria.codevila.com.br
 
-No diretório ./DB existe o arquivo Modelagem BD Imobiliaria.mwb que é o diagrama do projeto
+No diretório ./DB existe o arquivo Modelagem BD Imobiliaria.mwb (arquivo workbench) que é o diagrama do projeto
 
 Abaixo o imagem do diagrama do banco de dados 
 
