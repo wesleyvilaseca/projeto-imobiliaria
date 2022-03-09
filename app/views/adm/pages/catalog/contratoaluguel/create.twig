@@ -78,14 +78,14 @@
 					<div class="form-group mb-2">
 						<small class="control-label">Taxa admininstração * (valor percentual)</small>
 						<div>
-							<input class="form-control form-control-sm" placeholder="5" name="taxa_administracao" type="number" style="width:100%" value="{{ old ? old.taxa_administracao : contrato ? contrato.taxa_administracao : ''}}" min="0" max="100" required>
+							<input class="form-control form-control-sm" placeholder="5" name="taxa_administracao" type="number" style="width:100%" value="{{ old ? old.taxa_administracao : contrato ? contrato.taxa_administracao : ''}}" min="1" maxlenght="100" required>
 						</div>
 					</div>
 
 					<div class="form-group mb-2">
 						<small class="control-label">Valor do aluguel *</small>
 						<div>
-							<input class="form-control form-control-sm" placeholder="800" name="valor_aluguel" type="number" style="width:100%" value="{{ old ? old.valor_aluguel : contrato ? contrato.valor_aluguel : ''}}" min="0" required>
+							<input class="form-control form-control-sm" placeholder="800" name="valor_aluguel" type="number" style="width:100%" value="{{ old ? old.valor_aluguel : contrato ? contrato.valor_aluguel : ''}}" min="1" required>
 						</div>
 					</div>
 
@@ -99,7 +99,7 @@
 					<div class="form-group mb-2">
 						<small class="control-label">Valor do iptu *</small>
 						<div>
-							<input class="form-control form-control-sm" placeholder="100" name="valor_iptu" type="number" style="width:100%" value="{{ old ? old.valor_iptu : contrato ? contrato.valor_iptu : ''}}" min="0" required>
+							<input class="form-control form-control-sm" placeholder="100" name="valor_iptu" type="number" style="width:100%" value="{{ old ? old.valor_iptu : contrato ? contrato.valor_iptu : ''}}" min="1" required>
 						</div>
 					</div>
 				</div>

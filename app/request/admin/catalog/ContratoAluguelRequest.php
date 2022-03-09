@@ -15,7 +15,7 @@ class ContratoAluguelRequest
     public $request_get;
     public $request_post;
 
-    private $inputs_required = ['locador_id', 'locatario_id', 'imovel_id', 'contrato', 'data_inicio', 'data_fim', 'taxa_administracao', 'valor_aluguel', 'valor_condominio', 'valor_iptu'];
+    private $inputs_required = ['locador_id', 'locatario_id', 'imovel_id', 'contrato', 'data_inicio', 'data_fim', 'taxa_administracao', 'valor_aluguel', 'valor_iptu'];
 
     public function __construct()
     {
@@ -33,9 +33,9 @@ class ContratoAluguelRequest
                     setmessage(['tipo' => 'warning', 'msg' => 'Os campos com asterisco (*) são de preenchimento obrigatório']);
                     setdataform($this->request_post);
                     if (!$id) {
-                        return redirect(URL_BASE . 'admin-catalog-locador/create');
+                        return redirect(URL_BASE . 'admin-catalog-contratoaluguel/create');
                     }
-                    return redirect(URL_BASE . 'admin-catalog-locador/edit/' . $id);
+                    return redirect(URL_BASE . 'admin-catalog-contratoaluguel/edit/' . $id);
                 }
             }
         }

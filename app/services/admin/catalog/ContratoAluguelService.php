@@ -108,7 +108,7 @@ class ContratoAluguelService
         $contrato_aluguel->data_fim             = $request['data_fim'];
         $contrato_aluguel->taxa_administracao   = tofloat($request['taxa_administracao']);
         $contrato_aluguel->valor_aluguel        = tofloat($request['valor_aluguel']);
-        $contrato_aluguel->valor_condominio     = tofloat($request['valor_condominio']);
+        $contrato_aluguel->valor_condominio     = $request['valor_condominio'] > 0 ? tofloat($request['valor_condominio']) : 0;
         $contrato_aluguel->valor_iptu           = tofloat($request['valor_iptu']);
         $contrato_aluguel->status_contrato      = 1;
         $contrato_aluguel->contrato             = $contrato;
